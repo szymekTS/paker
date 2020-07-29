@@ -22,7 +22,8 @@ public class City {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinTable(name = "cities_provinces",
 			joinColumns = @JoinColumn(name = "city_id"), 
-			inverseJoinColumns = @JoinColumn(name = "province_id"))
+			inverseJoinColumns = @JoinColumn(name = "province_id")
+			)
 	private Province province;
 	
 	public City() {

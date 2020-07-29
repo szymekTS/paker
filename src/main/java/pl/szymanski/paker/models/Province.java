@@ -2,6 +2,8 @@ package pl.szymanski.paker.models;
 
 import javax.persistence.*;
 
+import pl.szymanski.paker.models.enums.EProvince;
+
 @Entity
 @Table(name = "provinces")
 public class Province {

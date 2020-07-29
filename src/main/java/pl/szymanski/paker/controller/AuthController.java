@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.szymanski.paker.models.ERole;
 import pl.szymanski.paker.models.Role;
 import pl.szymanski.paker.models.User;
+import pl.szymanski.paker.models.enums.ERole;
 import pl.szymanski.paker.payload.request.LoginRequest;
 import pl.szymanski.paker.payload.request.SignupRequest;
 import pl.szymanski.paker.payload.response.JwtResponse;

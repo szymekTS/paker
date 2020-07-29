@@ -1,4 +1,4 @@
-package pl.szymanski.paker.models;
+package pl.szymanski.paker.models.enums;
 
 public enum EProvince {
 	PROV_DOLNOSLASKIE("dolnośląskie"),
