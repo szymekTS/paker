@@ -1,9 +1,8 @@
 package pl.szymanski.paker.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.mongodb.repository.MongoRepository;
 import pl.szymanski.paker.models.City;
 
-public interface CityRepo extends JpaRepository<City, Long> {
+public interface CityRepo extends MongoRepository<City, Long> {
 
 }

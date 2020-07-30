@@ -1,9 +1,8 @@
 package pl.szymanski.paker.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.mongodb.repository.MongoRepository;
 import pl.szymanski.paker.models.Province;
 
-public interface ProvinceRepo extends JpaRepository<Province, Long> {
+public interface ProvinceRepo extends MongoRepository<Province, Long> {
 
 }

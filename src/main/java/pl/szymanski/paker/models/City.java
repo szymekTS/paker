@@ -2,14 +2,14 @@ package pl.szymanski.paker.models;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(	name = "cities")
+@Document(collation = "cities")
 public class City {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private String id;
 	
 	@NotBlank
 	@Size(max = 40)
@@ -19,11 +19,7 @@ public class City {
 	@Size(max = 5)
 	private String zipCode;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinTable(name = "cities_provinces",
-			joinColumns = @JoinColumn(name = "city_id"), 
-			inverseJoinColumns = @JoinColumn(name = "province_id")
-			)
+	@DBRef
 	private Province province;
 	
 	public City() {
@@ -35,11 +31,11 @@ public class City {
 		this.province = province;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

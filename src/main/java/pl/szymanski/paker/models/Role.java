@@ -1,46 +1,38 @@
 package pl.szymanski.paker.models;
 
-import javax.persistence.*;
-
 import pl.szymanski.paker.models.enums.ERole;
 
-@Entity
-@Table(name = "roles")
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "roles")
 public class Role {
+    @Id
+    private String id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(length = 20)
-	private ERole name;
+    private ERole name;
 
-	public Role() {
-		super();
-	}
+    public Role() {
 
-	public Role(ERole name) {
-		super();
-		this.name = name;
-	}
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Role(ERole name) {
+        this.name = name;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public ERole getName() {
-		return name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setName(ERole name) {
-		this.name = name;
-	}
-	
-	
-	
+    public ERole getName() {
+        return name;
+    }
+
+    public void setName(ERole name) {
+        this.name = name;
+    }
 }

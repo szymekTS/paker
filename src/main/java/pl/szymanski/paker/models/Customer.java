@@ -1,19 +1,16 @@
 package pl.szymanski.paker.models;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Entity
-@Table(	name = "customers", 
-		uniqueConstraints = { 
-			@UniqueConstraint(columnNames = "email") 
-		})
+@Document(collation = "customers")
 public class Customer {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private String id;
 	
 	@NotBlank
 	@Size(max = 20)
@@ -40,11 +37,11 @@ public class Customer {
 		this.email = email;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

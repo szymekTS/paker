@@ -46,11 +46,11 @@ public class SignupRequest {
         this.password = password;
     }
     
-    public Set<String> getRole() {
+    public Set<String> getRoles() {
       return this.role;
     }
     
-    public void setRole(Set<String> role) {
+    public void setRoles(Set<String> role) {
       this.role = role;
     }
 }
