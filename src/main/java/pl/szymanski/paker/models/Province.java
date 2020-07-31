@@ -4,11 +4,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pl.szymanski.paker.models.enums.EProvince;
 
-@Document(collation = "provinces")
+@Document(collection = "provinces")
 public class Province {
 
     @Id
-    private Integer id;
+    private String id;
 
     private EProvince name;
 
@@ -21,11 +21,11 @@ public class Province {
         this.name = name;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

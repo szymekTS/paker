@@ -1,5 +1,8 @@
 package pl.szymanski.paker.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
@@ -21,6 +24,9 @@ public class City {
 	
 	@DBRef
 	private Province province;
+
+	@DBRef
+	private Map<City,Double> neighbours = new HashMap<City,Double> ();
 	
 	public City() {
 	}
@@ -55,6 +61,7 @@ public class City {
 		this.zipCode = zipCode;
 	}
 
+
 	public Province getProvince() {
 		return province;
 	}
@@ -62,6 +69,12 @@ public class City {
 	public void setProvince(Province province) {
 		this.province = province;
 	}
-	
-	
+
+	public Map<City, Double> getNeighbours() {
+		return neighbours;
+	}
+
+	public void setNeighbours(Map<City, Double> neighbours) {
+		this.neighbours = neighbours;
+	}	
 }
