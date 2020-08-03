@@ -13,10 +13,10 @@ public class Car {
 	private String model;
 	private String licensePlate;
 
-    private float width;
-    private float depth;
-    private float height;
-	
+	private float width;
+	private float depth;
+	private float height;
+
 	@DBRef
 	private CarType type;
 
@@ -85,5 +85,4 @@ public class Car {
 		this.licensePlate = licensePlate;
 	}
 
-	
 }

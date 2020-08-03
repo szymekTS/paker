@@ -23,6 +23,6 @@
 hs_err_pid*
 .idea/
 .settings/
-target/
+/target/
 *.md
 .vscode/

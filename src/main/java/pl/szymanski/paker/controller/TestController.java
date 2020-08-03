@@ -1,16 +1,24 @@
 package pl.szymanski.paker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.szymanski.paker.models.Car;
+import pl.szymanski.paker.models.CarType;
+import pl.szymanski.paker.models.Maintenance;
 import pl.szymanski.paker.models.Province;
 import pl.szymanski.paker.models.Role;
+import pl.szymanski.paker.models.enums.ECarType;
 import pl.szymanski.paker.models.enums.EProvince;
 import pl.szymanski.paker.models.enums.ERole;
+import pl.szymanski.paker.repository.CarRepo;
+import pl.szymanski.paker.repository.CarTypeRepo;
+import pl.szymanski.paker.repository.MaintenanceRepo;
 import pl.szymanski.paker.repository.ProvinceRepo;
 import pl.szymanski.paker.repository.RoleRepo;
 
@@ -18,6 +26,13 @@ import pl.szymanski.paker.repository.RoleRepo;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+	@Autowired
+	private CarTypeRepo carType_R;
+	@Autowired
+	private CarRepo car_R;
+	@Autowired
+	private MaintenanceRepo main_R;
+
 	@GetMapping("/all")
 	public String allAccess() {
 		return "Public Content.";
@@ -41,47 +56,14 @@ public class TestController {
 		return "Admin Board.";
 	}
 
-	@Autowired
-	private RoleRepo role_R;
-	@Autowired
-	private ProvinceRepo prov_R;
-
-	@GetMapping("/load1")
-	public String initiateRole(){
-		role_R.deleteAll();
-
-		Role role;
-		ERole roles[] = ERole.values();
-		for(ERole rolee: roles){
-			role = new Role(rolee);
-			role_R.save(role);
-		}
-		StringBuilder out = new StringBuilder();
-		for (Role roleE : role_R.findAll()) {
-			out.append(roleE.getName());
-			out.append("\n");
-		}
-
-		return "Baza ról załadowana\n" + out;
-	}
-
-	@GetMapping("/load2")
-	public String initiateDB(){
-		prov_R.deleteAll();
-
-		Province province;
-		EProvince prov[] = EProvince.values();
-		for (EProvince prove : prov) {
-			province = new Province(prove);
-			prov_R.save(province);
-		}
-
-		StringBuilder out = new StringBuilder();
-		for (Province provE : prov_R.findAll()) {
-			out.append(provE.getName());
-			out.append("\n");
-		}
-
-		return "Baza województw załadowana\n" + out;
+	@GetMapping("/main")
+	public String testMaintenance(){
+		CarType typ = carType_R.findByType(ECarType.TYPE_SMALL)
+					.orElseThrow(() -> new RuntimeException("Error: CarType is not found."));
+		Car auto = new Car("Fiat", "Doblo", "TOP1234", typ);
+		car_R.save(auto);
+		Maintenance naprawa = new Maintenance(auto, "Jebła uszczelka pod głowicą");
+		main_R.save(naprawa);
+		return "ok";
 	}
 }

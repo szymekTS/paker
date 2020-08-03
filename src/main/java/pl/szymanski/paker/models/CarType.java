@@ -1,22 +1,21 @@
 package pl.szymanski.paker.models;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import pl.szymanski.paker.models.enums.ECartype;
+import pl.szymanski.paker.models.enums.ECarType;
 
 @Document(collection = "car_types")
 public class CarType {
     @Id
     private String id;
     
-    private ECartype type;
+    private ECarType type;
 
     public CarType() {
     }
 
-    public CarType(ECartype type) {
+    public CarType(ECarType type) {
         this.type = type;
     }
 
@@ -28,11 +27,11 @@ public class CarType {
         this.id = id;
     }
 
-    public ECartype getType() {
+    public ECarType getType() {
         return type;
     }
 
-    public void setType(ECartype type) {
+    public void setType(ECarType type) {
         this.type = type;
     }
 
