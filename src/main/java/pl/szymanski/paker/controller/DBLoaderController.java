@@ -41,16 +41,6 @@ public class DBLoaderController {
     @Autowired
     private CityRepo city_R;
 
-
-    @GetMapping("")
-    public String db(){
-        return "its bd controler";
-    }
-
-
-    /**
-     * localhost:8900/api/db/load_admin
-    */
     @GetMapping("load_admin")
     public ResponseEntity<MessageResponse> initiateAdmin(){
 
@@ -60,7 +50,7 @@ public class DBLoaderController {
                     .body(new MessageResponse("Admin is already in DB!"));
         }
         else{
-            User admin =  new User("admin","tomaszekszym@gmail.com", encoder.encode("admin"));
+            User admin =  new User("admin","tomaszekszym@gmail.com","Tomasz","Szymański", encoder.encode("admin"),"662527971");
 
             Set<Role> roles = new HashSet<>();
             Role adminRole = role_R.findByName(ERole.ROLE_ADMIN)

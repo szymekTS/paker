@@ -13,71 +13,115 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
 public class User {
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	@NotBlank
-	@Size(max = 20)
-	private String username;
+    @NotBlank
+    @Size(max = 20)
+    private String username;
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
-	private String email;
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
 
-	@NotBlank
-	@Size(max = 120)
-	private String password;
+    private String name;
 
-	@DBRef
-	private Set<Role> roles = new HashSet<>();
+    private String surname;
 
-	public User() {
-	}
+    private String number;
 
-	public User(String username, String email, String password) {
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
+    @NotBlank
+    @Size(max = 120)
+    private String password;
 
-	public String getId() {
-		return id;
-	}
+    @DBRef
+    private Set<Role> roles = new HashSet<>();
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public User() {
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.name = "";
+        this.surname = "";
+        this.number = "";
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email, String name, String surname, @NotBlank @Size(max = 120) String password, String number) {
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.number = number;
+        this.password = password;
+    }
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
