@@ -119,6 +119,7 @@ public class CityController {
         City city;
         if (cityOptional.isPresent()) {
             city = cityOptional.get();
+            System.out.println(city);
             ncityResponse = cityToNCityResponse(city);
             return ResponseEntity
                     .ok(ncityResponse);
@@ -206,6 +207,7 @@ public class CityController {
                          if(toDelNeighbour.isPresent()){
                              tmp = toDelNeighbour.get();
                              tmp.getNeighbours().remove(id);
+                             city_R.save(tmp);
                          }
                     }
                 }
