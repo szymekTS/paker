@@ -2,23 +2,21 @@ package pl.szymanski.paker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.szymanski.paker.models.CarType;
-import pl.szymanski.paker.models.Province;
-import pl.szymanski.paker.models.Role;
-import pl.szymanski.paker.models.User;
+import pl.szymanski.paker.models.*;
 import pl.szymanski.paker.models.enums.ECarType;
 import pl.szymanski.paker.models.enums.EProvince;
 import pl.szymanski.paker.models.enums.ERole;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.repository.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,6 +38,8 @@ public class DBLoaderController {
     private UserRepo user_R;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private CityRepo city_R;
 
 
     @GetMapping("")
@@ -65,7 +65,10 @@ public class DBLoaderController {
             Set<Role> roles = new HashSet<>();
             Role adminRole = role_R.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            Role modRole = role_R.findByName(ERole.ROLE_MODERATOR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
+            roles.add(modRole);
 
             admin.setRoles(roles);
             user_R.save(admin);
@@ -76,7 +79,6 @@ public class DBLoaderController {
     }
 
     @GetMapping("load_role")
-    @PreAuthorize("hasRole('ADMIN')")
     public String initiateRole(){
         role_R.deleteAll();
 
@@ -96,7 +98,6 @@ public class DBLoaderController {
     }
 
     @GetMapping("load_province")
-    @PreAuthorize("hasRole('ADMIN')")
     public String initiateProvince(){
         prov_R.deleteAll();
 
@@ -117,7 +118,6 @@ public class DBLoaderController {
     }
 
     @GetMapping("load_cartype")
-    @PreAuthorize("hasRole('ADMIN')")
     public String initiateCarTypes(){
         carType_R.deleteAll();
 
@@ -130,6 +130,28 @@ public class DBLoaderController {
         StringBuilder out = new StringBuilder();
         for (Role roleE : role_R.findAll()) {
             out.append(roleE.getName());
+            out.append("\n");
+        }
+
+        return "Baza typów aut załadowana\n" + out;
+    }
+
+    @GetMapping("load_cities")
+    public String initiateCities(){
+        city_R.deleteAll();
+
+        List<City> cityList = new ArrayList<City>();
+
+        cityList.add(new City("Kielce", "25000", prov_R.findByName(EProvince.PROV_SWIETOKRZYSKIE)));
+        cityList.add(new City("Warszawa", "00000", prov_R.findByName(EProvince.PROV_MAZOWIECKIE)));
+
+
+
+        city_R.saveAll(cityList);
+
+        StringBuilder out = new StringBuilder();
+        for (City city : city_R.findAll()) {
+            out.append(city.getName());
             out.append("\n");
         }
 

@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "cities")
+@Document(collection = "cities")
 public class City {
 	@Id
 	private String id;
@@ -25,8 +25,8 @@ public class City {
 	@DBRef
 	private Province province;
 
-	@DBRef
-	private Map<City,Double> neighbours = new HashMap<City,Double> ();
+
+	private Map<String, Double> neighbours = new HashMap<String, Double> ();
 	
 	public City() {
 	}
@@ -70,11 +70,24 @@ public class City {
 		this.province = province;
 	}
 
-	public Map<City, Double> getNeighbours() {
+	public Map<String,Double> getNeighbours() {
 		return neighbours;
 	}
 
-	public void setNeighbours(Map<City, Double> neighbours) {
+	public void setNeighbours(Map<String,Double> neighbours) {
 		this.neighbours = neighbours;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "City" +
+				"\n[" +
+				"\n id : " + this.getId() +
+				"\n name: " +  this.getName() +
+				"\n neighbours: " + this.getNeighbours().size()+
+				"\n   {" +
+				"\n      "+ this.getNeighbours().keySet() + " : " +this.getNeighbours().values()+
+				"\n   }" +
+				"\n]";
+	}
 }
