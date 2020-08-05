@@ -1,4 +1,4 @@
-package pl.szymanski.paker.controller;
+package pl.szymanski.paker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class CityController {
      * Metoda zwraca miasto o podanym ID
      *
      * @param id
-     * @return  zwraca miasto
+     * @return zwraca miasto
      */
     @GetMapping("/find")
     public ResponseEntity<?> getCityById(@RequestParam String id) {
@@ -61,7 +61,7 @@ public class CityController {
      * Metoda szukająca miasta po kodzie pocztowym
      *
      * @param zipCode kod pocztowy
-     * @return  zwraca liste miast z kodem pocztowym
+     * @return zwraca liste miast z kodem pocztowym
      */
     @GetMapping("/find_zip")
     public ResponseEntity<List<CityResponse>> getCityByZipCode(@RequestParam String zipCode) {
@@ -129,6 +129,7 @@ public class CityController {
 
     /**
      * Metoda dodaje sąsiada do miasta
+     *
      * @param id
      * @param city_id
      * @param distance
@@ -144,12 +145,12 @@ public class CityController {
             if (neighbourOptional.isPresent()) {
                 neighbour = neighbourOptional.get();
 
-                Map<String,Double> map = city.getNeighbours();
+                Map<String, Double> map = city.getNeighbours();
                 if (!map.containsKey(neighbour.getId())) {
-                    Map<String,Double> map2 = neighbour.getNeighbours();
+                    Map<String, Double> map2 = neighbour.getNeighbours();
                     map.put(neighbour.getId(), distance);
                     city.setNeighbours(map);
-                    map2.put(city.getId(),distance);
+                    map2.put(city.getId(), distance);
                     neighbour.setNeighbours(map2);
 
                     city_R.save(neighbour);
@@ -166,18 +167,19 @@ public class CityController {
 
     /**
      * Metoda ładuje do bazy nowe miasto
+     *
      * @param newCity obiekt klasu {@link pl.szymanski.paker.payload.request.CityRequest}
      * @return zwraca ResponseEntity, w przypadku powodzenia obiekt klasy  {@link pl.szymanski.paker.payload.response.CityResponse},
      * w wypadku istnienia miasta zwraca {@link pl.szymanski.paker.payload.response.MessageResponse} BadRequest,
      * w wypadku niepoprawnego obiektu zwraca {@link pl.szymanski.paker.payload.response.MessageResponse}BadRequest
      */
     @PostMapping("/new")
-    public ResponseEntity<?> addCity(@Valid @RequestBody CityRequest newCity){
-        if(newCity.isValid()){
+    public ResponseEntity<?> addCity(@Valid @RequestBody CityRequest newCity) {
+        if (newCity.isValid()) {
 
 
             City city = cityRequestToCity(newCity);
-            if(city_R.existsByZipCode(city.getZipCode())){
+            if (city_R.existsByZipCode(city.getZipCode())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("City exist"));
@@ -187,28 +189,28 @@ public class CityController {
 
             return ResponseEntity.ok(cityToCityResponse(city));
         }
-            return ResponseEntity
+        return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Not valid request"));
     }
 
     @DeleteMapping("/del")
-    public ResponseEntity<?> delCity(@RequestParam String id){
-        if(city_R.existsById(id)){
+    public ResponseEntity<?> delCity(@RequestParam String id) {
+        if (city_R.existsById(id)) {
             Optional<City> cityOptional = city_R.findById(id);
-            if(cityOptional.isPresent()) {
+            if (cityOptional.isPresent()) {
                 City city = cityOptional.get();
-                Map<String,Double> map = city.getNeighbours();
-                if(!map.isEmpty()){
+                Map<String, Double> map = city.getNeighbours();
+                if (!map.isEmpty()) {
                     Optional<City> toDelNeighbour;
                     City tmp;
-                    for(Map.Entry<String,Double> entry: map.entrySet()){
-                         toDelNeighbour = city_R.findById(entry.getKey());
-                         if(toDelNeighbour.isPresent()){
-                             tmp = toDelNeighbour.get();
-                             tmp.getNeighbours().remove(id);
-                             city_R.save(tmp);
-                         }
+                    for (Map.Entry<String, Double> entry : map.entrySet()) {
+                        toDelNeighbour = city_R.findById(entry.getKey());
+                        if (toDelNeighbour.isPresent()) {
+                            tmp = toDelNeighbour.get();
+                            tmp.getNeighbours().remove(id);
+                            city_R.save(tmp);
+                        }
                     }
                 }
                 city_R.deleteById(id);
@@ -227,9 +229,9 @@ public class CityController {
      * Metoda zamieniająca obiekt klasy {@link pl.szymanski.paker.payload.request.CityRequest} na obiekty klasy {@link pl.szymanski.paker.models.City}
      *
      * @param newCity okiekt klasy {@link pl.szymanski.paker.payload.request.CityRequest}
-     * @return  obiekty klasy {@link pl.szymanski.paker.models.City}
+     * @return obiekty klasy {@link pl.szymanski.paker.models.City}
      */
-    private City cityRequestToCity(CityRequest newCity){
+    private City cityRequestToCity(CityRequest newCity) {
         return new City(newCity.getName(), newCity.getZipCode(), prov_R.findByName(newCity.getProvince()));
     }
 
@@ -237,11 +239,11 @@ public class CityController {
      * Metoda zamieniająca obiekt klasy {@link pl.szymanski.paker.models.City} na obiekty klasy {@link pl.szymanski.paker.payload.response.NeighbourCityResponse}
      *
      * @param city okiekt klasy {@link pl.szymanski.paker.models.City}
-     * @return  obiekty klasy {@link pl.szymanski.paker.payload.response.NeighbourCityResponse}
+     * @return obiekty klasy {@link pl.szymanski.paker.payload.response.NeighbourCityResponse}
      */
     private NeighbourCityResponse cityToNCityResponse(City city) {
         Map<String, Double> map = new HashMap<String, Double>();
-        for (Map.Entry<String,Double> c : city.getNeighbours().entrySet()) {
+        for (Map.Entry<String, Double> c : city.getNeighbours().entrySet()) {
             Optional<City> cityOptional = city_R.findById(c.getKey());
             City citya;
             if (cityOptional.isPresent()) {

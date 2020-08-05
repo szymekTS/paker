@@ -1,7 +1,6 @@
-package pl.szymanski.paker.controller;
+package pl.szymanski.paker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.szymanski.paker.models.Car;
 import pl.szymanski.paker.models.CarType;
 import pl.szymanski.paker.models.Maintenance;
-import pl.szymanski.paker.models.Province;
-import pl.szymanski.paker.models.Role;
 import pl.szymanski.paker.models.enums.ECarType;
-import pl.szymanski.paker.models.enums.EProvince;
-import pl.szymanski.paker.models.enums.ERole;
 import pl.szymanski.paker.repository.CarRepo;
 import pl.szymanski.paker.repository.CarTypeRepo;
 import pl.szymanski.paker.repository.MaintenanceRepo;
-import pl.szymanski.paker.repository.ProvinceRepo;
-import pl.szymanski.paker.repository.RoleRepo;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

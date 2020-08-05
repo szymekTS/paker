@@ -1,4 +1,4 @@
-package pl.szymanski.paker.controller;
+package pl.szymanski.paker.controllers;
 
 import java.util.HashSet;
 import java.util.List;

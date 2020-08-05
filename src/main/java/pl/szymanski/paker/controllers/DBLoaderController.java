@@ -1,4 +1,4 @@
-package pl.szymanski.paker.controller;
+package pl.szymanski.paker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +70,25 @@ public class DBLoaderController {
 
     @GetMapping("load_role")
     public String initiateRole(){
+        role_R.deleteAll();
+
+        Role role;
+        var roles = ERole.values();
+        for(ERole rolee: roles){
+            role = new Role(rolee);
+            role_R.save(role);
+        }
+        StringBuilder out = new StringBuilder();
+        for (Role roleE : role_R.findAll()) {
+            out.append(roleE.getName());
+            out.append("\n");
+        }
+
+        return "Baza ról załadowana\n" + out;
+    }
+
+    @GetMapping("load_repair")
+    public String initiateRepair(){
         role_R.deleteAll();
 
         Role role;

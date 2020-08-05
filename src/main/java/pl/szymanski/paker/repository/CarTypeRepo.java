@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface CarTypeRepo extends MongoRepository<CarType, String> {
 
     Optional<CarType> findByType(ECarType type);
+    CarType findByType(String type);
 }

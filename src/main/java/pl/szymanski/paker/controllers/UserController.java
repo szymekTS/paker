@@ -1,10 +1,9 @@
-package pl.szymanski.paker.controller;
+package pl.szymanski.paker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import pl.szymanski.paker.models.City;
 import pl.szymanski.paker.models.Role;
 import pl.szymanski.paker.models.User;
 import pl.szymanski.paker.payload.request.UserChangePasswordRequest;
@@ -30,7 +29,7 @@ public class UserController {
     private PasswordEncoder ncdr;
 
     @GetMapping("find_all")
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll() {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findAll()) {
@@ -40,9 +39,9 @@ public class UserController {
     }
 
     @GetMapping("find")
-    public ResponseEntity<?> findById(@RequestParam String id){
+    public ResponseEntity<?> findById(@RequestParam String id) {
         Optional<User> userOptional = user_R.findById(id);
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
             UserResponse response = userToUserResponse(user);
             return ResponseEntity
@@ -54,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("find_name")
-    public ResponseEntity<?> findByName(@RequestParam String name){
+    public ResponseEntity<?> findByName(@RequestParam String name) {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findByNameRegex(name)) {
@@ -64,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("find_surname")
-    public ResponseEntity<?> findBySurname(@RequestParam String surname){
+    public ResponseEntity<?> findBySurname(@RequestParam String surname) {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findBySurnameRegex(surname)) {
@@ -74,7 +73,7 @@ public class UserController {
     }
 
     @GetMapping("find_username")
-    public ResponseEntity<?> findByUsername(@RequestParam String username){
+    public ResponseEntity<?> findByUsername(@RequestParam String username) {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findByUsernameRegex(username)) {
@@ -84,7 +83,7 @@ public class UserController {
     }
 
     @GetMapping("find_email")
-    public ResponseEntity<?> findByemail(@RequestParam String email){
+    public ResponseEntity<?> findByemail(@RequestParam String email) {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findByEmailRegex(email)) {
@@ -94,9 +93,9 @@ public class UserController {
     }
 
     @GetMapping("find_number")
-    public ResponseEntity<?> findByNumber(@RequestParam String number){
+    public ResponseEntity<?> findByNumber(@RequestParam String number) {
         Optional<User> userOptional = user_R.findByNumber(number);
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
             UserResponse response = userToUserResponse(user);
             return ResponseEntity
@@ -108,23 +107,21 @@ public class UserController {
     }
 
     @PostMapping("new")
-    public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest newUser){
-        if(newUser.isValid()){
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest newUser) {
+        if (newUser.isValid()) {
 
             User user = userRequestToUser(newUser);
-            if(user_R.existsByUsername(user.getUsername())){
+            if (user_R.existsByUsername(user.getUsername())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("User exist"));
             }
-            if(user_R.existsByEmail(user.getEmail())){
+            if (user_R.existsByEmail(user.getEmail())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Email exist"));
             }
-
             user_R.save(user);
-
             return ResponseEntity.ok(userToUserResponse(user));
         }
         return ResponseEntity
@@ -133,8 +130,8 @@ public class UserController {
     }
 
     @DeleteMapping("del")
-    public ResponseEntity<?>delUser(@RequestParam String id){
-        if(user_R.existsById(id)){
+    public ResponseEntity<?> delUser(@RequestParam String id) {
+        if (user_R.existsById(id)) {
             user_R.deleteById(id);
             return ResponseEntity
                     .ok(new MessageResponse("Deleted"));
@@ -145,14 +142,14 @@ public class UserController {
     }
 
     @PostMapping("pass")
-    public ResponseEntity<?> updatePassword(@Valid @RequestBody UserChangePasswordRequest passwordRequest){
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody UserChangePasswordRequest passwordRequest) {
 
-        if(passwordRequest.isValid()){
-            if(user_R.existsById(passwordRequest.getId())){
+        if (passwordRequest.isValid()) {
+            if (user_R.existsById(passwordRequest.getId())) {
                 Optional<User> userOptional = user_R.findById(passwordRequest.getId());
-                if(userOptional.isPresent()){
+                if (userOptional.isPresent()) {
                     User user = userOptional.get();
-                    if(ncdr.matches(passwordRequest.getOldPassword(), user.getPassword())){
+                    if (ncdr.matches(passwordRequest.getOldPassword(), user.getPassword())) {
                         user.setPassword(ncdr.encode(passwordRequest.getPassword()));
                         user_R.save(user);
                         return ResponseEntity
@@ -161,7 +158,7 @@ public class UserController {
                     }
                     return ResponseEntity
                             .badRequest()
-                            .body(new MessageResponse("Old password doesnt match"));
+                            .body(new MessageResponse("Old password doesn't match"));
                 }
             }
             return ResponseEntity
@@ -174,12 +171,11 @@ public class UserController {
     }
 
     @PostMapping("update")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest updatedUser){
-        if(updatedUser.isValid()){
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest updatedUser) {
+        if (updatedUser.isValid()) {
             User user = userRequestToUser(updatedUser);
             Optional<User> toUpdateOptional = user_R.findByUsername(updatedUser.getUserName());
-            System.out.println(user);
-            if(toUpdateOptional.isPresent()){
+            if (toUpdateOptional.isPresent()) {
                 User toUpdate = toUpdateOptional.get();
                 toUpdate.setName(user.getName());
                 toUpdate.setSurname(user.getSurname());
@@ -197,10 +193,10 @@ public class UserController {
                 .body(new MessageResponse("Not valid request"));
     }
 
-    private User userRequestToUser(UserRequest user){
-        User nowy = new User(user.getUserName(),user.getEmail(),ncdr.encode(user.getPassword()));
+    private User userRequestToUser(UserRequest user) {
+        User nowy = new User(user.getUserName(), user.getEmail(), ncdr.encode(user.getPassword()));
         Set<Role> tmp = new HashSet<Role>();
-        for (String  role : user.getRoles()) {
+        for (String role : user.getRoles()) {
             tmp.add(role_R.findByName(role));
         }
         nowy.setRoles(tmp);
