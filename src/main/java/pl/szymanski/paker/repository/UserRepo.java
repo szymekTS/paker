@@ -31,7 +31,9 @@ public interface UserRepo extends MongoRepository<User, String> {
     List<User> findByEmailRegex(String email);
 
 
-
-
     void deleteById(String id);
+
+    List<User> findByIsFree(Boolean isFree);
+
+    List<User> findByLocalization(String localization);
 }

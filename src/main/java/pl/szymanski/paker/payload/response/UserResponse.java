@@ -10,17 +10,22 @@ public class UserResponse {
     private String number;
     private String email;
     private Set<String> roles;
+    private String localization;
+    private Boolean isFree;
 
-    public UserResponse() {
+    public UserResponse(String id, String username, String name, String surname, String number, String email, String localization, boolean free) {
     }
 
-    public UserResponse(String id, String userName, String name, String surname, String number, String email) {
+    public UserResponse(String id, String userName, String name, String surname, String number, String email, Set<String> roles, String localization, Boolean isFree) {
         this.id = id;
         this.userName = userName;
         this.name = name;
         this.surname = surname;
         this.number = number;
         this.email = email;
+        this.roles = roles;
+        this.localization = localization;
+        this.isFree = isFree;
     }
 
     public String getId() {
@@ -69,6 +74,22 @@ public class UserResponse {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
+    public Boolean getFree() {
+        return isFree;
+    }
+
+    public void setFree(Boolean free) {
+        isFree = free;
     }
 
     public Set<String> getRoles() {

@@ -1,4 +1,5 @@
 package pl.szymanski.paker.models;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,8 +13,7 @@ public class Status {
     private String id;
 
     private EStatus statusCode;
-    @DBRef
-    private City location;
+
     @DBRef
     private User worker;
 
@@ -22,9 +22,8 @@ public class Status {
     public Status() {
     }
 
-    public Status(EStatus statusCode, City location, User worker, String comments) {
+    public Status(EStatus statusCode, User worker, String comments) {
         this.statusCode = statusCode;
-        this.location = location;
         this.worker = worker;
         this.comments = comments;
     }
@@ -43,14 +42,6 @@ public class Status {
 
     public void setStatusCode(EStatus statusCode) {
         this.statusCode = statusCode;
-    }
-
-    public City getLocation() {
-        return location;
-    }
-
-    public void setLocation(City location) {
-        this.location = location;
     }
 
     public User getWorker() {

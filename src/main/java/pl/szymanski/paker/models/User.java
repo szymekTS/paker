@@ -31,6 +31,11 @@ public class User {
 
     private String number;
 
+    private String localization;
+
+    private boolean isFree;
+
+
     @NotBlank
     @Size(max = 120)
     private String password;
@@ -48,6 +53,8 @@ public class User {
         this.name = "";
         this.surname = "";
         this.number = "";
+        this.localization = "";
+        this.isFree = false;
     }
 
     public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email, String name, String surname, @NotBlank @Size(max = 120) String password, String number) {
@@ -123,5 +130,21 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
     }
 }

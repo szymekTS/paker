@@ -13,17 +13,22 @@ public class UserRequest {
     private String email;
     private String password;
     private Set<String> roles = new HashSet<>();
+    private String localization;
+    private Boolean isFree;
 
     public UserRequest() {
     }
 
-    public UserRequest(String userName, String name, String surname, String number, String email, String password) {
+    public UserRequest(String userName, String name, String surname, String number, String email, String password, Set<String> roles, String localization, Boolean isFree) {
         this.userName = userName;
         this.name = name;
         this.surname = surname;
         this.number = number;
         this.email = email;
         this.password = password;
+        this.roles = roles;
+        this.localization = localization;
+        this.isFree = isFree;
     }
 
     public String getUserName() {
@@ -82,12 +87,28 @@ public class UserRequest {
         this.roles = roles;
     }
 
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
+    public Boolean getFree() {
+        return isFree;
+    }
+
+    public void setFree(Boolean free) {
+        isFree = free;
+    }
+
     public boolean isValid() {
-        if(this.userName.length()<6)
+        if (this.userName.length() < 6)
             return false;
-        if(this.password.length()<6)
+        if (this.password.length() < 6)
             return false;
-        if(this.email.length()<6)
+        if (this.email.length() < 6)
             return false;
         return true;
     }
