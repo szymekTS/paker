@@ -21,7 +21,6 @@ public class CityController {
         return cityService.findByID(id);
     }
 
-
     @GetMapping("/find_name")
     public ResponseEntity<?> getCityByName(@RequestParam String name) {
         return cityService.findByName(name);
@@ -31,7 +30,6 @@ public class CityController {
     public ResponseEntity<?> getCityByZipCode(@RequestParam String zipCode) {
         return cityService.findByZipCode(zipCode);
     }
-
 
     @GetMapping("/find_prov")
     public ResponseEntity<?> getCityByProvince(@RequestParam String prov) {
