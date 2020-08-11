@@ -1,27 +1,23 @@
-package pl.szymanski.paker.models;
+package pl.szymanski.paker.payload.request;
+
+import pl.szymanski.paker.models.Item;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "cargos")
-public class Cargo {
-
-    @Id
+public class CargoRequest {
     private String id;
     private Set<Item> register = new HashSet<Item>();
-
     private float value;
     private float weight;
 
-    public Cargo() {
+    public CargoRequest() {
     }
 
-    public Cargo(Set<Item> register) {
+    public CargoRequest(Set<Item> register, float value, float weight) {
         this.register = register;
-        calculateValueAndWeight();
+        this.value = value;
+        this.weight = weight;
     }
 
     public String getId() {
@@ -44,25 +40,19 @@ public class Cargo {
         return value;
     }
 
-    public float getWeight() {
-        return weight;
-    }
-
     public void setValue(float value) {
         this.value = value;
+    }
+
+    public float getWeight() {
+        return weight;
     }
 
     public void setWeight(float weight) {
         this.weight = weight;
     }
 
-    private void calculateValueAndWeight() {
-        this.weight = 0.0f;
-        this.value = 0.0f;
-
-        for (Item item : this.register) {
-            this.weight += item.getWeight();
-            this.value += item.getValue();
-        }
+    public boolean idValid() {
+        return !this.register.isEmpty() && (this.value != 0) && this.weight != 0;
     }
 }
