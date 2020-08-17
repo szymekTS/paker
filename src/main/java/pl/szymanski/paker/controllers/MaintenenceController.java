@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szymanski.paker.payload.request.MaintenenceRequest;
-import pl.szymanski.paker.services.MaintenenceService;
+import pl.szymanski.paker.services.MaintenanceService;
 
 import javax.validation.Valid;
 
@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/maintanence/")
 public class MaintenenceController {
     @Autowired
-    MaintenenceService maintanenceService;
+    MaintenanceService maintanenceService;
 
     @GetMapping("find_all")
     public ResponseEntity<?> findAll() {
@@ -36,12 +36,12 @@ public class MaintenenceController {
 
     @PostMapping("new")
     public ResponseEntity<?> addCar(@Valid @RequestBody MaintenenceRequest maintenenceRequest) {
-        return maintanenceService.addMaintenence(maintenenceRequest);
+        return maintanenceService.addMaintenance(maintenenceRequest);
     }
 
     @DeleteMapping("del")
     public ResponseEntity<?> delCar(@RequestParam String id) {
-        return maintanenceService.delMaintenence(id);
+        return maintanenceService.delMaintenance(id);
     }
 
     @GetMapping("change_status")

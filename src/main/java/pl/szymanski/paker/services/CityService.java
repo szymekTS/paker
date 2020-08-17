@@ -32,7 +32,7 @@ public class CityService {
     }
 
     public ResponseEntity<?> findByName(String name) {
-        List<CityResponse> responseList = new ArrayList<CityResponse>();
+        List<CityResponse> responseList = new ArrayList<>();
 
         for (City c : city_R.findByNameRegex(name)) {
             responseList.add(cityToCityResponse(c));
@@ -41,7 +41,7 @@ public class CityService {
     }
 
     public ResponseEntity<?> findByZipCode(String zipCode) {
-        List<CityResponse> responseList = new ArrayList<CityResponse>();
+        List<CityResponse> responseList = new ArrayList<>();
 
         for (City c : city_R.findByZipCode(zipCode)) {
             responseList.add(cityToCityResponse(c));
@@ -50,7 +50,7 @@ public class CityService {
     }
 
     public ResponseEntity<?> findByProvince(String prov) {
-        List<CityResponse> responseList = new ArrayList<CityResponse>();
+        List<CityResponse> responseList = new ArrayList<>();
 
         Province province = prov_R.findByName(prov);
 
@@ -61,7 +61,7 @@ public class CityService {
     }
 
     public ResponseEntity<?> findAll() {
-        List<CityResponse> responseList = new ArrayList<CityResponse>();
+        List<CityResponse> responseList = new ArrayList<>();
 
         for (City c : city_R.findAll()) {
             responseList.add(cityToCityResponse(c));
@@ -71,7 +71,7 @@ public class CityService {
 
     public ResponseEntity<?> findNeighbours(String id) {
         Optional<City> cityOptional = city_R.findById(id);
-        NeighbourCityResponse ncityResponse;
+        @SuppressWarnings("SpellCheckingInspection") NeighbourCityResponse ncityResponse;
         City city;
         if (cityOptional.isPresent()) {
             city = cityOptional.get();
@@ -167,10 +167,10 @@ public class CityService {
     }
 
     private NeighbourCityResponse cityToNCityResponse(City city) {
-        Map<String, Double> map = new HashMap<String, Double>();
+        Map<String, Double> map = new HashMap<>();
         for (Map.Entry<String, Double> c : city.getNeighbours().entrySet()) {
             Optional<City> cityOptional = city_R.findById(c.getKey());
-            City citya;
+            @SuppressWarnings("SpellCheckingInspection") City citya;
             if (cityOptional.isPresent()) {
                 citya = cityOptional.get();
                 map.put(citya.getId(), c.getValue());

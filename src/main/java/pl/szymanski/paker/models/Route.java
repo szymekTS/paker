@@ -1,5 +1,6 @@
 package pl.szymanski.paker.models;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -14,9 +15,9 @@ public class Route {
     private double distance;
 
     @DBRef
-    private ArrayList<City> route = new ArrayList<City>();
+    private List<City> route = new ArrayList<>();
 
-    
+
 
     public String getId() {
         return id;
@@ -34,18 +35,18 @@ public class Route {
         this.distance = distance;
     }
 
-    public ArrayList<City> getRoute() {
+    public List<City> getRoute() {
         return route;
     }
 
-    public void setRoute(ArrayList<City> route) {
+    public void setRoute(List<City> route) {
         this.route = route;
     }
 
     public Route() {
     }
 
-    public Route(double distance, ArrayList<City> route) {
+    public Route(double distance, List<City> route) {
         this.distance = distance;
         this.route = route;
     }

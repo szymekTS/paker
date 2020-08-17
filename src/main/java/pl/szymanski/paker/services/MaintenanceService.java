@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.Car;
-import pl.szymanski.paker.models.Customer;
 import pl.szymanski.paker.models.Maintenance;
 import pl.szymanski.paker.models.enums.ERepair;
-import pl.szymanski.paker.payload.request.CustomerRequest;
 import pl.szymanski.paker.payload.request.MaintenenceRequest;
-import pl.szymanski.paker.payload.response.CustomerResponse;
 import pl.szymanski.paker.payload.response.MaintenenceResponse;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.repository.CarRepo;
@@ -20,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MaintenenceService {
+public class MaintenanceService {
 
     @Autowired
     MaintenanceRepo maintenance_R;
@@ -28,7 +25,7 @@ public class MaintenenceService {
     CarRepo car_R;
 
     public ResponseEntity<?> findAll() {
-        List<MaintenenceResponse> responseList = new ArrayList<MaintenenceResponse>();
+        List<MaintenenceResponse> responseList = new ArrayList<>();
 
         for (Maintenance m : maintenance_R.findAll()) {
             responseList.add(mainToMainResponse(m));
@@ -51,7 +48,7 @@ public class MaintenenceService {
     }
 
     public ResponseEntity<?> findByCar(String carId) {
-        List<MaintenenceResponse> responseList = new ArrayList<MaintenenceResponse>();
+        List<MaintenenceResponse> responseList = new ArrayList<>();
         Optional<Car> carOptional = car_R.findById(carId);
         if(carOptional.isPresent()){
             Car car = carOptional.get();
@@ -65,7 +62,7 @@ public class MaintenenceService {
                 .body(new MessageResponse("Not Found"));
     }
     public ResponseEntity<?> findByStatus(String status) {
-        List<MaintenenceResponse> responseList = new ArrayList<MaintenenceResponse>();
+        List<MaintenenceResponse> responseList = new ArrayList<>();
 
         for (Maintenance m : maintenance_R.findByStatus(status)) {
             responseList.add(mainToMainResponse(m));
@@ -73,9 +70,9 @@ public class MaintenenceService {
         return ResponseEntity.ok(responseList);
     }
 
-    public ResponseEntity<?> addMaintenence(MaintenenceRequest newMaintenence) {
-        if (newMaintenence.isValid()) {
-            Maintenance maintenance = mainRequestToMain(newMaintenence);
+    public ResponseEntity<?> addMaintenance(MaintenenceRequest newMaintenance) {
+        if (newMaintenance.isValid()) {
+            Maintenance maintenance = mainRequestToMain(newMaintenance);
             if(maintenance.getCar().getId() == null){
                 return ResponseEntity
                         .badRequest()
@@ -91,7 +88,7 @@ public class MaintenenceService {
 
 
 
-    public ResponseEntity<?> delMaintenence(String id) {
+    public ResponseEntity<?> delMaintenance(String id) {
         if (maintenance_R.existsById(id)) {
             maintenance_R.deleteById(id);
             return ResponseEntity
@@ -130,12 +127,12 @@ public class MaintenenceService {
         return new MaintenenceResponse(maintenance.getId(), maintenance.getCar().getId(), maintenance.getProblemDescription(), maintenance.getStatus(), maintenance.getStartTime(), maintenance.getDoneTime());
     }
 
-    private Maintenance mainRequestToMain(MaintenenceRequest newMaintenence) {
-        Optional<Car> optionalCar = car_R.findById(newMaintenence.getCarId());
+    private Maintenance mainRequestToMain(MaintenenceRequest newMaintenance) {
+        Optional<Car> optionalCar = car_R.findById(newMaintenance.getCarId());
         Car car = new Car();
         if (optionalCar.isPresent()) {
             car = optionalCar.get();
         }
-        return new Maintenance(car, newMaintenence.getDescription());
+        return new Maintenance(car, newMaintenance.getDescription());
     }
 }

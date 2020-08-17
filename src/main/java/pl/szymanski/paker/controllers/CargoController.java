@@ -18,6 +18,16 @@ public class CargoController {
         return cargoService.findAll();
     }
 
+    @GetMapping("find_value")
+    public ResponseEntity<?> findByValueMinMax(@RequestParam float min, @RequestParam float max) {
+        return cargoService.findByValue(min, max);
+    }
+
+    @GetMapping("find_weight")
+    public ResponseEntity<?> findByWeightMinMax(@RequestParam float min, @RequestParam float max) {
+        return cargoService.findByWeight(min,max);
+    }
+
     @GetMapping("find")
     public ResponseEntity<?> findById(@RequestParam String id) {
         return cargoService.findById(id);

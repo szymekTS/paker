@@ -21,7 +21,7 @@ public class CargoService {
 
 
     public ResponseEntity<?> findAll() {
-        List<CargoResponse> responseList = new ArrayList<CargoResponse>();
+        List<CargoResponse> responseList = new ArrayList<>();
 
         for (Cargo c : cargo_R.findAll()) {
             responseList.add(cargoToCargoResponse(c));
@@ -40,6 +40,24 @@ public class CargoService {
         return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Not Found"));
+    }
+
+    public ResponseEntity<?> findByValue(float min, float max) {
+        List<CargoResponse> responseList = new ArrayList<>();
+
+        for (Cargo c : cargo_R.findByValueBetween(min,max)) {
+            responseList.add(cargoToCargoResponse(c));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    public ResponseEntity<?> findByWeight(float min, float max) {
+        List<CargoResponse> responseList = new ArrayList<>();
+
+        for (Cargo c : cargo_R.findByWeightBetween(min,max)) {
+            responseList.add(cargoToCargoResponse(c));
+        }
+        return ResponseEntity.ok(responseList);
     }
 
     public ResponseEntity<?> update(CargoRequest updateCargo) {

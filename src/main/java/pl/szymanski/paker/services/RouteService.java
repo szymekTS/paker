@@ -2,6 +2,7 @@ package pl.szymanski.paker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.City;
 import pl.szymanski.paker.models.Route;
 import pl.szymanski.paker.payload.response.MessageResponse;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class RouteService {
     @Autowired
     private RouteRepo route_R;
@@ -34,7 +36,7 @@ public class RouteService {
 
         response.setId(route.getId());
         response.setDistance(route.getDistance());
-        List<String> tmp = new ArrayList<String>();
+        List<String> tmp = new ArrayList<>();
         for(City city : route.getRoute()){
             tmp.add(city.getId());
         }

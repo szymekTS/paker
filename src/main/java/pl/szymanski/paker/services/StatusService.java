@@ -2,6 +2,7 @@ package pl.szymanski.paker.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.Status;
 import pl.szymanski.paker.models.User;
 import pl.szymanski.paker.models.enums.EStatus;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class StatusService {
     @Autowired
     private StatusRepo status_R;
@@ -22,7 +24,7 @@ public class StatusService {
     private UserRepo user_R;
 
     public ResponseEntity<?> findAll() {
-        List<StatusResponse> responseList = new ArrayList<StatusResponse>();
+        List<StatusResponse> responseList = new ArrayList<>();
 
         for (Status c : status_R.findAll()) {
             responseList.add(statusToStatusResponse(c));
@@ -44,7 +46,7 @@ public class StatusService {
     }
 
     public ResponseEntity<?> findByWorker(String workerId) {
-        List<StatusResponse> responseList = new ArrayList<StatusResponse>();
+        List<StatusResponse> responseList = new ArrayList<>();
         Optional<User> userOptional = user_R.findById(workerId);
         if (userOptional.isPresent()) {
             for (Status c : status_R.findByWorker(userOptional.get())) {
@@ -55,7 +57,7 @@ public class StatusService {
     }
 
     public ResponseEntity<?> findByStatus(String status) {
-        List<StatusResponse> responseList = new ArrayList<StatusResponse>();
+        List<StatusResponse> responseList = new ArrayList<>();
         for (Status c : status_R.findByStatus(status)) {
             responseList.add(statusToStatusResponse(c));
         }

@@ -23,7 +23,7 @@ public class CarService {
     private CarTypeRepo carType_R;
 
     public ResponseEntity<?> findAll() {
-        List<CarResponse> responseList = new ArrayList<CarResponse>();
+        List<CarResponse> responseList = new ArrayList<>();
 
         for (Car c : car_R.findAll()) {
             responseList.add(carToCarResponse(c));
@@ -45,7 +45,7 @@ public class CarService {
     }
 
     public ResponseEntity<?> findByBrand(String brand) {
-        List<CarResponse> responseList = new ArrayList<CarResponse>();
+        List<CarResponse> responseList = new ArrayList<>();
 
         for (Car c : car_R.findByBrandRegex(brand)) {
             responseList.add(carToCarResponse(c));
@@ -54,7 +54,7 @@ public class CarService {
     }
 
     public ResponseEntity<?> findByModel(String model) {
-        List<CarResponse> responseList = new ArrayList<CarResponse>();
+        List<CarResponse> responseList = new ArrayList<>();
 
         for (Car c : car_R.findByModelRegex(model)) {
             responseList.add(carToCarResponse(c));
@@ -63,7 +63,7 @@ public class CarService {
     }
 
     public ResponseEntity<?> findByPlate(String plate) {
-        List<CarResponse> responseList = new ArrayList<CarResponse>();
+        List<CarResponse> responseList = new ArrayList<>();
 
         for (Car c : car_R.findByLicensePlateRegex(plate)) {
             responseList.add(carToCarResponse(c));
@@ -72,7 +72,7 @@ public class CarService {
     }
 
     public ResponseEntity<?> findByType(String type) {
-        List<CarResponse> responseList = new ArrayList<CarResponse>();
+        List<CarResponse> responseList = new ArrayList<>();
         CarType carType = carType_R.findByType(type);
 
         for (Car c : car_R.findByType(carType)) {

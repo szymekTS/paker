@@ -20,7 +20,7 @@ public class CustomerService {
     CustomerRepo customer_R;
 
     public ResponseEntity<?> findAll() {
-        List<CustomerResponse> responseList = new ArrayList<CustomerResponse>();
+        List<CustomerResponse> responseList = new ArrayList<>();
 
         for (Customer u : customer_R.findAll()) {
             responseList.add(customerToCustomerResponse(u));
@@ -43,7 +43,7 @@ public class CustomerService {
     }
 
     public ResponseEntity<?> findByName(String name) {
-        List<CustomerResponse> responseList = new ArrayList<CustomerResponse>();
+        List<CustomerResponse> responseList = new ArrayList<>();
 
         for( Customer u : customer_R.findByNameRegex(name)) {
             responseList.add(customerToCustomerResponse(u));
@@ -52,7 +52,7 @@ public class CustomerService {
     }
 
     public ResponseEntity<?> findBySurname(String surname) {
-        List<CustomerResponse> responseList = new ArrayList<CustomerResponse>();
+        List<CustomerResponse> responseList = new ArrayList<>();
 
         for (Customer u : customer_R.findBySurnameRegex(surname)) {
             responseList.add(customerToCustomerResponse(u));
@@ -61,7 +61,7 @@ public class CustomerService {
     }
 
     public ResponseEntity<?> findByEmail(String email) {
-        List<CustomerResponse> responseList = new ArrayList<CustomerResponse>();
+        List<CustomerResponse> responseList = new ArrayList<>();
 
         for (Customer u : customer_R.findByEmailRegex(email)) {
             responseList.add(customerToCustomerResponse(u));
@@ -72,7 +72,7 @@ public class CustomerService {
     public ResponseEntity<?> addCustomer(CustomerRequest newCustomer) {
         if (newCustomer.isValid()) {
 
-            Customer customer = customerRequestTocustomer(newCustomer);
+            Customer customer = customerRequestToCustomer(newCustomer);
             if (customer_R.existsByEmail(customer.getEmail())) {
                 return ResponseEntity
                         .badRequest()
@@ -99,7 +99,7 @@ public class CustomerService {
 
     public ResponseEntity<?> updateUser(CustomerRequest updatedUser) {
         if (updatedUser.isValid()) {
-            Customer customer = customerRequestTocustomer(updatedUser);
+            Customer customer = customerRequestToCustomer(updatedUser);
             Optional<Customer> toUpdateOptional = customer_R.findByEmail(updatedUser.getEmail());
             if (toUpdateOptional.isPresent()) {
                 Customer toUpdate = toUpdateOptional.get();
@@ -122,7 +122,7 @@ public class CustomerService {
         return new CustomerResponse(u.getId(),u.getName(),u.getSurname(), u.getEmail());
     }
 
-    private Customer customerRequestTocustomer(CustomerRequest customerRequest){
+    private Customer customerRequestToCustomer(CustomerRequest customerRequest){
         Customer customer = new Customer();
         customer.setName(customerRequest.getName());
         customer.setSurname(customerRequest.getSurname());

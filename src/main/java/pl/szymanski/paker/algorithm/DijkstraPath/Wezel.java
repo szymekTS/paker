@@ -1,5 +1,7 @@
 package pl.szymanski.paker.algorithm.DijkstraPath;
 
+import pl.szymanski.paker.models.City;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.Map;
 
 public class Wezel {
     private int id;
-    private String nazwa;
+    private City miasto;
     private Double dystans = Double.MAX_VALUE;
     private List<Wezel> sciezka = new LinkedList<>();
     private Map<Wezel, Double> sasiedzi = new HashMap<>();
@@ -16,8 +18,8 @@ public class Wezel {
         this.sasiedzi.put(sasiad, odleglosc);
     }
 
-    public Wezel(String nazwa) {
-        this.nazwa = nazwa;
+    public Wezel(City nazwa) {
+        this.miasto = nazwa;
     }
 
     public int getId() {
@@ -28,12 +30,12 @@ public class Wezel {
         this.id = id;
     }
 
-    public String getNazwa() {
-        return nazwa;
+    public City getMiasto() {
+        return miasto;
     }
 
-    public void setNazwa(String nazwa) {
-        this.nazwa = nazwa;
+    public void setMiasto(City miasto) {
+        this.miasto = miasto;
     }
 
     public List<Wezel> getSciezka() {
@@ -62,6 +64,6 @@ public class Wezel {
 
     @Override
     public String toString() {
-        return nazwa;
+        return miasto.getId();
     }
 }
