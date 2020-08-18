@@ -13,7 +13,7 @@ public interface OrderRepo extends MongoRepository<Order, String> {
     Optional<Order> findByCargo(Cargo cargo);
 
     List<Order> findByCustomer(Customer customer);
-    List<Order> findByStatus(String status);
+    List<Order> findByLastStatus(String status);
 
     List<Order> findByOrigin(City city);
     List<Order> findByDestiny(City city);

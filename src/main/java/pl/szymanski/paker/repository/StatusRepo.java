@@ -11,5 +11,5 @@ public interface StatusRepo extends MongoRepository<Status, String> {
 
     List<Status> findByWorker(User worker);
 
-    List<Status> findByStatus(String status);
+    List<Status> findByStatusCode(String status);
 }

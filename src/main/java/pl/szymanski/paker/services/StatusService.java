@@ -58,7 +58,7 @@ public class StatusService {
 
     public ResponseEntity<?> findByStatus(String status) {
         List<StatusResponse> responseList = new ArrayList<>();
-        for (Status c : status_R.findByStatus(status)) {
+        for (Status c : status_R.findByStatusCode(status)) {
             responseList.add(statusToStatusResponse(c));
         }
 

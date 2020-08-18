@@ -119,7 +119,7 @@ public class OrderService {
     public ResponseEntity<?> findByStatus(String status) {
         List<OrderResponse> responseList = new ArrayList<>();
 
-        for (Order u : order_R.findByStatus(status)) {
+        for (Order u : order_R.findByLastStatus(status)) {
             responseList.add(orderToOrderResponse(u));
         }
         return ResponseEntity.ok(responseList);
