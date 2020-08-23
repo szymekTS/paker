@@ -33,6 +33,10 @@ public class OrderService {
     @Autowired
     private CalculateRouteService pathFinder;
 
+    @Autowired
+    private OrderRepoImpl orderRepo;
+
+
     public ResponseEntity<?> findAll() {
         List<OrderResponse> responseList = new ArrayList<>();
 
@@ -58,7 +62,7 @@ public class OrderService {
     public ResponseEntity<?> findByCar(String id) {
         List<OrderResponse> responseList = new ArrayList<>();
         Optional<Car> carOptional = car_R.findById(id);
-        if(carOptional.isPresent()){
+        if (carOptional.isPresent()) {
             Car car = carOptional.get();
             for (Order order : order_R.findByCar(car)) {
                 responseList.add(orderToOrderResponse(order));
@@ -72,9 +76,9 @@ public class OrderService {
 
     public ResponseEntity<?> findByCargoValue(float min, float max) {
         List<OrderResponse> responseList = new ArrayList<>();
-        List<Cargo>  cargoList = cargo_R.findByValueBetween(min, max);
+        List<Cargo> cargoList = cargo_R.findByValueBetween(min, max);
         Optional<Order> optionalOrder;
-        for(Cargo cargo : cargoList){
+        for (Cargo cargo : cargoList) {
             optionalOrder = order_R.findByCargo(cargo);
             if (optionalOrder.isPresent()) {
                 Order order = optionalOrder.get();
@@ -87,9 +91,9 @@ public class OrderService {
 
     public ResponseEntity<?> findByCargoWeight(float min, float max) {
         List<OrderResponse> responseList = new ArrayList<>();
-        List<Cargo>  cargoList = cargo_R.findByWeightBetween(min, max);
+        List<Cargo> cargoList = cargo_R.findByWeightBetween(min, max);
         Optional<Order> optionalOrder;
-        for(Cargo cargo : cargoList){
+        for (Cargo cargo : cargoList) {
             optionalOrder = order_R.findByCargo(cargo);
             if (optionalOrder.isPresent()) {
                 Order order = optionalOrder.get();
@@ -104,7 +108,7 @@ public class OrderService {
 
         List<OrderResponse> responseList = new ArrayList<>();
         Optional<Customer> customerOptional = customer_R.findById(id);
-        if(customerOptional.isPresent()){
+        if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
             for (Order order : order_R.findByCustomer(customer)) {
                 responseList.add(orderToOrderResponse(order));
@@ -125,10 +129,28 @@ public class OrderService {
         return ResponseEntity.ok(responseList);
     }
 
+    public ResponseEntity<?> findByStatusAndLocalization(String status, String location) {
+        List<OrderResponse> responseList = new ArrayList<>();
+
+        for (Order u : orderRepo.findByStatusAndLocalization(status, location)) {
+            responseList.add(orderToOrderResponse(u));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    public ResponseEntity<?> findByLocation(String localization) {
+        List<OrderResponse> responseList = new ArrayList<>();
+
+        for (Order u : order_R.findByLocalization(localization)) {
+            responseList.add(orderToOrderResponse(u));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
     public ResponseEntity<?> findByOrigin(String cityId) {
         List<OrderResponse> responseList = new ArrayList<>();
         Optional<City> cityOptional = city_R.findById(cityId);
-        if(cityOptional.isPresent()){
+        if (cityOptional.isPresent()) {
             City city = cityOptional.get();
             for (Order order : order_R.findByOrigin(city)) {
                 responseList.add(orderToOrderResponse(order));
@@ -143,7 +165,7 @@ public class OrderService {
     public ResponseEntity<?> findByDestiny(String cityId) {
         List<OrderResponse> responseList = new ArrayList<>();
         Optional<City> cityOptional = city_R.findById(cityId);
-        if(cityOptional.isPresent()){
+        if (cityOptional.isPresent()) {
             City city = cityOptional.get();
             for (Order order : order_R.findByDestiny(city)) {
                 responseList.add(orderToOrderResponse(order));
@@ -162,9 +184,10 @@ public class OrderService {
             orderDB.setLastStatus(orderRequest.getLastStatus());
             Optional<Status> statusOptional;
             List<Status> statusList = new ArrayList<>();
-            for(String id: orderRequest.getStatusList()){
+            for (String id : orderRequest.getStatusList()) {
                 statusOptional = status_R.findById(id);
-                statusList.add(statusOptional.get());
+                if (statusOptional.isPresent())
+                    statusList.add(statusOptional.get());
             }
             orderDB.setStatusList(statusList);
             order_R.save(orderDB);
@@ -178,7 +201,7 @@ public class OrderService {
 
     public ResponseEntity<?> addNew(OrderRequest orderRequest) {
         Order newOrder = orderRequestToOrder(orderRequest);
-        if(order_R.existsById(newOrder.getId())){
+        if (order_R.existsById(newOrder.getId())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Order exists"));
@@ -195,7 +218,7 @@ public class OrderService {
             Optional<Order> optionalOrder = order_R.findById(id);
             if (optionalOrder.isPresent()) {
                 Order order = optionalOrder.get();
-                for (Status status: order.getStatusList()){
+                for (Status status : order.getStatusList()) {
                     status_R.deleteById(status.getId());
                 }
                 route_R.deleteById(order.getRoute().getId());
@@ -217,6 +240,7 @@ public class OrderService {
         response.setCargo(order.getCargo().getId());
         response.setCustomer(order.getCustomer().getId());
         response.setLastStatus(order.getLastStatus().toString());
+        response.setLocalization(order.getLocalization().getId());
         response.setOrigin(order.getOrigin().getId());
         response.setDestiny(order.getDestiny().getId());
         response.setRoute(order.getRoute().getId());
@@ -231,39 +255,45 @@ public class OrderService {
     }
 
     private Order orderRequestToOrder(OrderRequest request) {
-        Order order =new Order();
+        Order order = new Order();
         Optional<Car> carOptional = car_R.findById(request.getCar());
-        if(carOptional.isPresent()){
+        if (carOptional.isPresent()) {
             order.setCar(carOptional.get());
         }
         Optional<Cargo> cargoOptional = cargo_R.findById(request.getCargo());
-        if(cargoOptional.isPresent()){
+        if (cargoOptional.isPresent()) {
             order.setCargo(cargoOptional.get());
         }
         Optional<Customer> customerOptional = customer_R.findById(request.getCustomer());
-        if(customerOptional.isPresent()){
+        if (customerOptional.isPresent()) {
             order.setCustomer(customerOptional.get());
         }
+        Optional<City> localizationOptional = city_R.findById(request.getLocalization());
+        if (localizationOptional.isPresent()) {
+            order.setOrigin(localizationOptional.get());
+        }
         Optional<City> originOptional = city_R.findById(request.getOrigin());
-        if(originOptional.isPresent()){
+        if (originOptional.isPresent()) {
             order.setOrigin(originOptional.get());
         }
         Optional<City> destinyOptional = city_R.findById(request.getDestiny());
-        if(destinyOptional.isPresent()){
+        if (destinyOptional.isPresent()) {
             order.setOrigin(destinyOptional.get());
         }
         order.setLastStatus(request.getLastStatus());
 
         Optional<Status> statusOptional;
         List<Status> statusList = new ArrayList<>();
-        for(String id: request.getStatusList()){
+        for (String id : request.getStatusList()) {
             statusOptional = status_R.findById(id);
-            statusList.add(statusOptional.get());
+            if (statusOptional.isPresent())
+                statusList.add(statusOptional.get());
         }
         order.setStatusList(statusList);
 
 
         return order;
     }
+
 
 }

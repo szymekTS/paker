@@ -4,7 +4,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.szymanski.paker.models.enums.EStatus;
+
+import java.util.Date;
 
 @Document(collection = "statuses")
 public class Status {
@@ -19,10 +22,15 @@ public class Status {
 
     private String comments;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date date;
+
     public Status() {
+        date = new Date();
     }
 
     public Status(EStatus statusCode, User worker, String comments) {
+        this();
         this.statusCode = statusCode;
         this.worker = worker;
         this.comments = comments;

@@ -1,11 +1,9 @@
 package pl.szymanski.paker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szymanski.paker.payload.request.OrderRequest;
-import pl.szymanski.paker.repository.OrderRepo;
 import pl.szymanski.paker.services.OrderService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -47,6 +45,14 @@ public class OrderController {
     @GetMapping("find_status")
     public ResponseEntity<?> findByStatus(@RequestParam String status) {
         return orderService.findByStatus(status);
+    }
+    @GetMapping("find_status_localization/")
+    public ResponseEntity<?> findByStatusAndLocalization(@RequestParam String status, @RequestParam String localization) {
+        return orderService.findByStatusAndLocalization(status, localization);
+    }
+    @GetMapping("find_location")
+    public ResponseEntity<?> findByLocation(@RequestParam String location) {
+        return orderService.findByLocation(location);
     }
     @GetMapping("find_origin")
     public ResponseEntity<?> findByOrigin(@RequestParam String origin) {

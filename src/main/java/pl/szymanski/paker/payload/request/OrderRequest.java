@@ -11,6 +11,7 @@ public class OrderRequest {
     private String customer;
     private List<String> statusList;
     private EStatus lastStatus;
+    private String localization;
     private String origin;
     private String destiny;
 
@@ -86,6 +87,14 @@ public class OrderRequest {
 
     public String getDestiny() {
         return destiny;
+    }
+
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
     }
 
     public void setDestiny(String destiny) {

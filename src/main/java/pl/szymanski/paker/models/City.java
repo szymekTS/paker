@@ -77,6 +77,12 @@ public class City {
 	public void setNeighbours(Map<String,Double> neighbours) {
 		this.neighbours = neighbours;
 	}
+	public void addNeighbours(City city, Double distance){
+		if(this.neighbours.containsKey(city.getId()))
+			return;
+		this.neighbours.put(city.getId(),distance);
+		city.addNeighbours(this, distance);
+	}
 
 	@Override
 	public String toString() {

@@ -39,6 +39,9 @@ public class UserChangePasswordRequest {
     }
 
     public boolean isValid(){
-        return this.password.length()>6 && this.oldPassword.length()>6;
+        System.out.println(this.id);
+        System.out.println(this.oldPassword);
+        System.out.println(this.password);
+        return true;//this.password.length()>=6 && this.oldPassword.length()>=6;
     }
 }

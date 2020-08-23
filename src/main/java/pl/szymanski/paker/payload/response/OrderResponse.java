@@ -1,7 +1,8 @@
 package pl.szymanski.paker.payload.response;
 
-import pl.szymanski.paker.models.enums.EStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 public class OrderResponse {
@@ -11,9 +12,16 @@ public class OrderResponse {
     private String customer;
     private List<String> statusList;
     private String lastStatus;
+    private String localization;
     private String origin;
     private String destiny;
     private String route;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date startTime;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date endTime;
+
 
     public OrderResponse() {
     }
@@ -94,11 +102,35 @@ public class OrderResponse {
         this.destiny = destiny;
     }
 
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
     public String getRoute() {
         return route;
     }
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

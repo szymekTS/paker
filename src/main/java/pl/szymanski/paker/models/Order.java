@@ -3,8 +3,10 @@ package pl.szymanski.paker.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.szymanski.paker.models.enums.EStatus;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "orders")
@@ -22,16 +24,26 @@ public class Order {
 
     private EStatus lastStatus;
     @DBRef
+    private City localization;
+    @DBRef
     private City origin;
     @DBRef
     private City destiny;
     @DBRef
     private Route route;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date startTime;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date endTime;
 
     public Order() {
+        startTime= new Date();
+        endTime= new Date();
     }
 
     public Order(String id, Car car, Cargo cargo, Customer customer, List<Status> statusList, City origin, City destiny, Route route) {
+        this();
         this.id = id;
         this.car = car;
         this.cargo = cargo;
@@ -112,5 +124,21 @@ public class Order {
 
     public void setRoute(Route route) {
         this.route = route;
+    }
+
+    public City getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(City localization) {
+        this.localization = localization;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

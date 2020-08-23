@@ -13,6 +13,9 @@ public class UserResponse {
     private String localization;
     private Boolean isFree;
 
+    public UserResponse() {
+    }
+
     public UserResponse(String id, String username, String name, String surname, String number, String email, String localization, boolean free) {
     }
 

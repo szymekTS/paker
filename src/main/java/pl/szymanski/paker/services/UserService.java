@@ -145,7 +145,6 @@ public class UserService {
     }
 
     public ResponseEntity<?> updatePassword(UserChangePasswordRequest passwordRequest) {
-
         if (passwordRequest.isValid()) {
             if (user_R.existsById(passwordRequest.getId())) {
                 Optional<User> userOptional = user_R.findById(passwordRequest.getId());
@@ -155,21 +154,18 @@ public class UserService {
                         user.setPassword(ncdr.encode(passwordRequest.getPassword()));
                         user_R.save(user);
                         return ResponseEntity
-                                .badRequest()
-                                .body(new MessageResponse("Password changed"));
+                                .ok(new MessageResponse("Hasło zmienione"));
                     }
                     return ResponseEntity
-                            .badRequest()
-                            .body(new MessageResponse("Old password doesn't match"));
+                            .ok(new MessageResponse("Hasła nie pasują"));
                 }
             }
             return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Not found"));
+                    .ok(new MessageResponse("Nie znaleziono"));
         }
         return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Not valid request"));
+                .body(new MessageResponse("Błędne zapytanie"));
     }
 
     public ResponseEntity<?> updateUser(UserRequest updatedUser) {
@@ -200,12 +196,27 @@ public class UserService {
         for (String role : user.getRoles()) {
             tmp.add(role_R.findByName(role));
         }
+        nowy.setName(user.getName());
+        nowy.setSurname(user.getSurname());
+        nowy.setNumber(user.getNumber());
+        nowy.setLocalization(user.getLocalization());
+        nowy.setFree(user.getFree());
+        
         nowy.setRoles(tmp);
         return nowy;
     }
 
     private UserResponse userToUserResponse(User userObj) {
-        UserResponse user = new UserResponse(userObj.getId(), userObj.getUsername(), userObj.getName(), userObj.getSurname(), userObj.getNumber(), userObj.getEmail(), userObj.getLocalization(), userObj.isFree());
+        UserResponse user = new UserResponse();
+
+        user.setId(userObj.getId());
+        user.setUserName(userObj.getUsername());
+        user.setName(userObj.getName());
+        user.setSurname(userObj.getSurname());
+        user.setNumber(userObj.getNumber());
+        user.setEmail(userObj.getEmail());
+        user.setLocalization(userObj.getLocalization());
+        user.setFree(userObj.isFree());
         Set<String> tmp = new HashSet<String>();
         for (Role role : userObj.getRoles()) {
             tmp.add(role.getName().name());

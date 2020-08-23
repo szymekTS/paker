@@ -18,4 +18,5 @@ public interface OrderRepo extends MongoRepository<Order, String> {
     List<Order> findByOrigin(City city);
     List<Order> findByDestiny(City city);
 
+    List<Order> findByLocalization(String localization);
 }
