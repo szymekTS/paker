@@ -5,14 +5,16 @@ import java.util.Map;
 public class NeighbourCityResponse {
     private String cityId;
     private Map<String, Double> neighbours;
+    private Map<String, String> names;
 
     public NeighbourCityResponse() {
 
     }
 
-    public NeighbourCityResponse(String city, Map<String, Double> neighbours) {
-        this.cityId = city;
+    public NeighbourCityResponse(String cityId, Map<String, Double> neighbours, Map<String, String> names) {
+        this.cityId = cityId;
         this.neighbours = neighbours;
+        this.names = names;
     }
 
     public String getCityId() {
@@ -29,5 +31,13 @@ public class NeighbourCityResponse {
 
     public void setNeighbours(Map<String, Double> neighbours) {
         this.neighbours = neighbours;
+    }
+
+    public Map<String, String> getNames() {
+        return names;
+    }
+
+    public void setNames(Map<String, String> names) {
+        this.names = names;
     }
 }

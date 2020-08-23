@@ -13,6 +13,8 @@ public interface CityRepo extends MongoRepository<City, String> {
     @Query(value = "{'name': {$regex : ?0, $options: 'i'}}")
     List<City> findByNameRegex(String name);
 
+    Optional<City> findByName(String id);
+
     List<City> findByZipCode(String zipCode);
 
     List<City> findByProvince(Province prov);

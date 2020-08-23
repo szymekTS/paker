@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.*;
+import pl.szymanski.paker.payload.request.OrderAddStatus;
 import pl.szymanski.paker.payload.request.OrderRequest;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.payload.response.OrderResponse;
@@ -30,6 +31,8 @@ public class OrderService {
     private StatusRepo status_R;
     @Autowired
     private RouteRepo route_R;
+    @Autowired
+    private UserRepo user_R;
     @Autowired
     private CalculateRouteService pathFinder;
 
@@ -296,4 +299,37 @@ public class OrderService {
     }
 
 
+    public ResponseEntity<?> addStatus(OrderAddStatus orderStatus) {
+        Optional<Order> optionalOrder = order_R.findById(orderStatus.getOrderId());
+        if (optionalOrder.isPresent()) {
+            Optional<User> optionalUser = user_R.findById(orderStatus.getWorkerID());
+            if (optionalUser.isPresent()){
+                Order order = optionalOrder.get();
+                User user = optionalUser.get();
+
+                Status newStatus = new Status();
+                newStatus.setStatusCode(orderStatus.getStatus());
+                newStatus.setComments(orderStatus.getComment());
+                newStatus.setWorker(user);
+
+                status_R.save(newStatus);
+
+                List<Status> statusList = order.getStatusList();
+                statusList.add(newStatus);
+                order.setStatusList(statusList);
+                order.setLastStatus(orderStatus.getStatus());
+
+                order_R.save(order);
+                return ResponseEntity
+                        .ok()
+                        .body(new MessageResponse("Status changed"));
+            }
+            return ResponseEntity
+                    .ok()
+                    .body(new MessageResponse("Worker not found"));
+        }
+        return ResponseEntity
+                .ok()
+                .body(new MessageResponse("Order not found"));
+    }
 }

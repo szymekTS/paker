@@ -1,34 +1,28 @@
 package pl.szymanski.paker.payload.request;
 
-import pl.szymanski.paker.models.Role;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public class UserRequest {
+public class UserUpdate {
     private String userName;
     private String name;
     private String surname;
     private String number;
     private String email;
-    private String password;
-    private Set<String> roles = new HashSet<>();
+    private List<String> roles = new ArrayList<>();
     private String localization;
-    private Boolean isFree = true;
 
-    public UserRequest() {
+    public UserUpdate() {
     }
 
-    public UserRequest(String userName, String name, String surname, String number, String email, String password, Set<String> roles, String localization, Boolean isFree) {
+    public UserUpdate(String userName, String name, String surname, String number, String email, List<String> roles, String localization) {
         this.userName = userName;
         this.name = name;
         this.surname = surname;
         this.number = number;
         this.email = email;
-        this.password = password;
         this.roles = roles;
         this.localization = localization;
-        this.isFree = isFree;
     }
 
     public String getUserName() {
@@ -71,19 +65,11 @@ public class UserRequest {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<String> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 
@@ -95,20 +81,10 @@ public class UserRequest {
         this.localization = localization;
     }
 
-    public Boolean getFree() {
-        return isFree;
-    }
-
-    public void setFree(Boolean free) {
-        isFree = free;
-    }
-
-    public boolean isValid() {
+    public boolean isValid(){
         if (this.userName.length() < 3)
             return false;
-        if (this.password.length() < 6)
-            return false;
-        if (this.email.length() < 6)
+        if (this.email.length() < 3)
             return false;
         return true;
     }

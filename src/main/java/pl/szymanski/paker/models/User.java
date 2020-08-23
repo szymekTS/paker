@@ -33,7 +33,7 @@ public class User {
 
     private String localization;
 
-    private boolean isFree;
+    private boolean isFree = true;
 
 
     @NotBlank
@@ -54,7 +54,6 @@ public class User {
         this.surname = "";
         this.number = "";
         this.localization = "";
-        this.isFree = false;
     }
 
     public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email, String name, String surname, @NotBlank @Size(max = 120) String password, String number) {

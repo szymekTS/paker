@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.szymanski.paker.models.City;
 import pl.szymanski.paker.models.Role;
 import pl.szymanski.paker.models.User;
+import pl.szymanski.paker.payload.request.UserChangeLocalization;
 import pl.szymanski.paker.payload.request.UserChangePasswordRequest;
 import pl.szymanski.paker.payload.request.UserRequest;
+import pl.szymanski.paker.payload.request.UserUpdate;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.payload.response.UserResponse;
+import pl.szymanski.paker.repository.CityRepo;
 import pl.szymanski.paker.repository.RoleRepo;
 import pl.szymanski.paker.repository.UserRepo;
 
@@ -22,8 +26,12 @@ public class UserService {
     @Autowired
     private RoleRepo role_R;
     @Autowired
+    private CityRepo city_R;
+
+    @Autowired
     private PasswordEncoder ncdr;
-    public ResponseEntity<?> findAll(){
+
+    public ResponseEntity<?> findAll() {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
         for (User u : user_R.findAll()) {
@@ -32,7 +40,7 @@ public class UserService {
         return ResponseEntity.ok(responseList);
     }
 
-    public ResponseEntity<?> findById(String id){
+    public ResponseEntity<?> findById(String id) {
         Optional<User> userOptional = user_R.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -89,6 +97,7 @@ public class UserService {
         }
         return ResponseEntity.ok(responseList);
     }
+
     public ResponseEntity<?> findByLocalization(String localization) {
         List<UserResponse> responseList = new ArrayList<UserResponse>();
 
@@ -168,15 +177,16 @@ public class UserService {
                 .body(new MessageResponse("Błędne zapytanie"));
     }
 
-    public ResponseEntity<?> updateUser(UserRequest updatedUser) {
+    public ResponseEntity<?> updateUser(UserUpdate updatedUser) {
         if (updatedUser.isValid()) {
-            User user = userRequestToUser(updatedUser);
+            User user = userUpdateToUser(updatedUser);
             Optional<User> toUpdateOptional = user_R.findByUsername(updatedUser.getUserName());
             if (toUpdateOptional.isPresent()) {
                 User toUpdate = toUpdateOptional.get();
                 toUpdate.setName(user.getName());
                 toUpdate.setSurname(user.getSurname());
                 toUpdate.setNumber(user.getNumber());
+
                 toUpdate.setRoles(user.getRoles());
                 user_R.save(toUpdate);
                 return ResponseEntity.ok(userToUserResponse(toUpdate));
@@ -190,6 +200,26 @@ public class UserService {
                 .body(new MessageResponse("Not valid request"));
     }
 
+    public ResponseEntity<?> updateLocalization(UserChangeLocalization localization) {
+        Optional<User> optionalUser = user_R.findByUsername(localization.getId());
+        if (optionalUser.isPresent()) {
+            Optional<City> cityOptional = city_R.findByName(localization.getNewLocalization());
+            if(cityOptional.isPresent()){
+                User user = optionalUser.get();
+                City city = cityOptional.get();
+
+                user.setLocalization(city.getId());
+                user_R.save(user);
+            }
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("City not found"));
+        }
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("User not found"));
+    }
+
     private User userRequestToUser(UserRequest user) {
         User nowy = new User(user.getUserName(), user.getEmail(), ncdr.encode(user.getPassword()));
         Set<Role> tmp = new HashSet<Role>();
@@ -201,7 +231,7 @@ public class UserService {
         nowy.setNumber(user.getNumber());
         nowy.setLocalization(user.getLocalization());
         nowy.setFree(user.getFree());
-        
+
         nowy.setRoles(tmp);
         return nowy;
     }
@@ -224,4 +254,24 @@ public class UserService {
         user.setRoles(tmp);
         return user;
     }
+
+
+    private User userUpdateToUser(UserUpdate user) {
+        User nowy = new User();
+        Set<Role> tmp = new HashSet<Role>();
+        for (String role : user.getRoles()) {
+            tmp.add(role_R.findByName(role));
+        }
+        nowy.setUsername(user.getUserName());
+        nowy.setName(user.getName());
+        nowy.setSurname(user.getSurname());
+        nowy.setNumber(user.getNumber());
+        nowy.setEmail(user.getEmail());
+        nowy.setLocalization(user.getLocalization());
+
+        nowy.setRoles(tmp);
+        return nowy;
+    }
+
+
 }

@@ -3,6 +3,7 @@ package pl.szymanski.paker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.szymanski.paker.payload.request.OrderAddStatus;
 import pl.szymanski.paker.payload.request.OrderRequest;
 import pl.szymanski.paker.services.OrderService;
 
@@ -66,6 +67,11 @@ public class OrderController {
     public ResponseEntity<?> update(@RequestBody OrderRequest orderRequest) {
         return orderService.update(orderRequest);
     }
+    @PostMapping("add_Status")
+    public ResponseEntity<?> update(@RequestBody OrderAddStatus orderStatus) {
+        return orderService.addStatus(orderStatus);
+    }
+
     @DeleteMapping("del")
     public ResponseEntity<?> del(@RequestParam String id) {
         return orderService.del(id);

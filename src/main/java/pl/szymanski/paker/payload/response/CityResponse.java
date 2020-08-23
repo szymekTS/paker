@@ -4,6 +4,7 @@ public class CityResponse {
     private String id;
     private String name;
     private String province;
+    private String provinceId;
     private String zipCode;
 
     public CityResponse(String id, String name, String privince, String zipCode) {
@@ -47,5 +48,13 @@ public class CityResponse {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 }

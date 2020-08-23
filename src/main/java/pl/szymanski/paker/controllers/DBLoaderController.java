@@ -59,7 +59,13 @@ public class DBLoaderController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
             roles.add(modRole);
-
+            roles.add(driverRole);
+            roles.add(pakerRole);
+            Optional<City> cityOptional = city_R.findByName("Kielce");
+            if (cityOptional.isPresent()){
+                City city = cityOptional.get();
+                admin.setLocalization(city.getId());
+            }
             admin.setRoles(roles);
             user_R.save(admin);
         }

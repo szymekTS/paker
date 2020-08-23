@@ -168,18 +168,26 @@ public class CityService {
 
     private NeighbourCityResponse cityToNCityResponse(City city) {
         Map<String, Double> map = new HashMap<>();
+        Map<String,String> names = new HashMap<>();
         for (Map.Entry<String, Double> c : city.getNeighbours().entrySet()) {
             Optional<City> cityOptional = city_R.findById(c.getKey());
             @SuppressWarnings("SpellCheckingInspection") City citya;
             if (cityOptional.isPresent()) {
                 citya = cityOptional.get();
                 map.put(citya.getId(), c.getValue());
+                names.put(citya.getId(), citya.getName());
             }
         }
-        return new NeighbourCityResponse(city.getId(), map);
+        return new NeighbourCityResponse(city.getId(), map, names);
     }
 
     private CityResponse cityToCityResponse(City city) {
-        return new CityResponse(city.getId(), city.getName(), city.getProvince().getName().name(), city.getZipCode());
+        CityResponse response = new CityResponse();
+        response.setId(city.getId());
+        response.setName(city.getName());
+        response.setZipCode(city.getZipCode());
+        response.setProvinceId(city.getProvince().getId());
+        response.setProvince(city.getProvince().getName().name);
+        return response;
     }
 }

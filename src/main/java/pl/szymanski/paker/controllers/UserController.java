@@ -6,8 +6,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.szymanski.paker.models.Role;
 import pl.szymanski.paker.models.User;
+import pl.szymanski.paker.payload.request.UserChangeLocalization;
 import pl.szymanski.paker.payload.request.UserChangePasswordRequest;
 import pl.szymanski.paker.payload.request.UserRequest;
+import pl.szymanski.paker.payload.request.UserUpdate;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.payload.response.UserResponse;
 import pl.szymanski.paker.repository.RoleRepo;
@@ -85,8 +87,13 @@ public class UserController {
         return userService.updatePassword(passwordRequest);
     }
 
+    @PostMapping("loc")
+    public ResponseEntity<?> updateLocalization(@RequestBody UserChangeLocalization localization) {
+        return userService.updateLocalization(localization);
+    }
+
     @PostMapping("update")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest updatedUser) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdate updatedUser) {
         return userService.updateUser(updatedUser);
     }
 }
