@@ -3,6 +3,7 @@ package pl.szymanski.paker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.szymanski.paker.payload.request.CityAddNeighbour;
 import pl.szymanski.paker.payload.request.CityRequest;
 import pl.szymanski.paker.services.CityService;
 
@@ -47,9 +48,9 @@ public class CityController {
         return cityService.findNeighbours(id);
     }
 
-    @GetMapping("/add_neighbour")
-    public ResponseEntity<?> addNeighbour(@RequestParam String id, @RequestParam String city_id, @RequestParam double distance) {
-        return cityService.addNeighbour(id, city_id, distance);
+    @PostMapping("/add_neighbour")
+    public ResponseEntity<?> addNeighbour(@RequestBody CityAddNeighbour addNewNeighbour) {
+        return cityService.addNeighbour(addNewNeighbour);
     }
 
     @PostMapping("/new")

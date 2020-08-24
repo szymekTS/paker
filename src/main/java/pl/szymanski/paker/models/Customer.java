@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Document(collation = "customers")
+@Document(collection = "customers")
 public class Customer {
 	@Id
 	private String id;

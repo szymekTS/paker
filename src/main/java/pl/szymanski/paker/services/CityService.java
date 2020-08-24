@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.City;
 import pl.szymanski.paker.models.Province;
+import pl.szymanski.paker.payload.request.CityAddNeighbour;
 import pl.szymanski.paker.payload.request.CityRequest;
 import pl.szymanski.paker.payload.response.CityResponse;
 import pl.szymanski.paker.payload.response.MessageResponse;
@@ -83,23 +84,29 @@ public class CityService {
         return ResponseEntity.ok("");
     }
 
-    public ResponseEntity<?> addNeighbour(String id,String city_id, double distance) {
-        Optional<City> cityOptional = city_R.findById(id);
-        Optional<City> neighbourOptional = city_R.findById(city_id);
+    public ResponseEntity<?> addNeighbour(CityAddNeighbour cityAddNeighbour) {
+        Optional<City> cityOptional = city_R.findById(cityAddNeighbour.getId());
+        Optional<City> neighbourOptional = city_R.findById(cityAddNeighbour.getCity_id());
         City city, neighbour;
         if (cityOptional.isPresent()) {
             city = cityOptional.get();
             if (neighbourOptional.isPresent()) {
                 neighbour = neighbourOptional.get();
 
+                if(city.getId().equals(neighbour.getId())){
+                    return ResponseEntity
+                            .badRequest()
+                            .body(new MessageResponse("Can't be own neighbour"));
+                }
                 Map<String, Double> map = city.getNeighbours();
                 if (!map.containsKey(neighbour.getId())) {
                     Map<String, Double> map2 = neighbour.getNeighbours();
-                    map.put(neighbour.getId(), distance);
+                    map.put(neighbour.getId(), cityAddNeighbour.getDistance());
                     city.setNeighbours(map);
-                    map2.put(city.getId(), distance);
+                    map2.put(city.getId(), cityAddNeighbour.getDistance());
                     neighbour.setNeighbours(map2);
 
+                    System.out.println("City added");
                     city_R.save(neighbour);
                     city_R.save(city);
                     return ResponseEntity.ok("added");
@@ -115,6 +122,9 @@ public class CityService {
     public ResponseEntity<?> addCity(CityRequest newCity) {
         if (newCity.isValid()) {
 
+            System.out.println(newCity.getName());
+            System.out.println(newCity.getProvince());
+            System.out.println(newCity.getZipCode());
 
             City city = cityRequestToCity(newCity);
             if (city_R.existsByZipCode(city.getZipCode())) {
