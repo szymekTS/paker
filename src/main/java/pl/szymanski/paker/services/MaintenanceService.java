@@ -106,9 +106,6 @@ public class MaintenanceService {
 
             switch (maintenance.getStatus()){
                 case REPORTED:
-                    maintenance.setStatus(ERepair.PENDING);
-                    break;
-                case PENDING:
                     maintenance.setStatus(ERepair.INPROGRES);
                     break;
                 case INPROGRES:

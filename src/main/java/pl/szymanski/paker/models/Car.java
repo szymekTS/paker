@@ -20,6 +20,8 @@ public class Car {
 	@DBRef
 	private CarType type;
 
+	private boolean inRepair;
+
 	public Car() {
 	}
 
@@ -28,6 +30,7 @@ public class Car {
 		this.model = model;
 		this.licensePlate = licensePlate;
 		setType(type);
+		this.inRepair = false;
 	}
 
 	public String getId() {
@@ -85,4 +88,11 @@ public class Car {
 		this.licensePlate = licensePlate;
 	}
 
+	public boolean isInRepair() {
+		return inRepair;
+	}
+
+	public void setInRepair(boolean inRepair) {
+		this.inRepair = inRepair;
+	}
 }

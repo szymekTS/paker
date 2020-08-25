@@ -1,7 +1,5 @@
 package pl.szymanski.paker.payload.request;
 
-import pl.szymanski.paker.models.Role;
-
 import java.util.HashSet;
 import java.util.Set;
 

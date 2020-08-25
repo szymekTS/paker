@@ -3,8 +3,12 @@ package pl.szymanski.paker.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.szymanski.paker.algorithm.BinPacker.Packer;
 import pl.szymanski.paker.models.Cargo;
+import pl.szymanski.paker.models.enums.ECarType;
+import pl.szymanski.paker.payload.request.CargoItem;
 import pl.szymanski.paker.payload.request.CargoRequest;
+import pl.szymanski.paker.payload.request.CargoCheckType;
 import pl.szymanski.paker.payload.response.CargoResponse;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.repository.CargoRepo;
@@ -102,5 +106,58 @@ public class CargoService {
         tmp.setValue(cargo.getValue());
         tmp.setWeight(cargo.getWeight());
         return tmp;
+    }
+
+    public ResponseEntity<?> checkType(CargoCheckType listItem) {
+        Packer packer;
+        float maxH =0f;
+        float listWeight=0f;
+        for(CargoItem item : listItem.getList()){
+            if(item.height>maxH){
+                maxH = item.height;
+            }
+            listWeight+= item.weight;
+        }
+        if(listWeight<=ECarType.TYPE_SMALL.weight){
+            if(maxH<=ECarType.TYPE_SMALL.height){
+                packer = new Packer(ECarType.TYPE_SMALL.width,ECarType.TYPE_SMALL.depth);
+                packer.loadItems(listItem.getList());
+                packer.fit();
+                if(packer.checkResult()){
+                    return ResponseEntity.ok(ECarType.TYPE_SMALL);
+                }
+            }
+        }
+        if(listWeight<=ECarType.TYPE_MID.weight){
+            if(maxH<=ECarType.TYPE_MID.height){
+                packer = new Packer(ECarType.TYPE_MID.width,ECarType.TYPE_MID.depth);
+                packer.loadItems(listItem.getList());
+                packer.fit();
+                if(packer.checkResult()){
+                    return ResponseEntity.ok(ECarType.TYPE_MID);
+                }
+            }
+        }
+        if(listWeight<=ECarType.TYPE_BIG.weight){
+            if(maxH<=ECarType.TYPE_BIG.height){
+                packer = new Packer(ECarType.TYPE_BIG.width,ECarType.TYPE_BIG.depth);
+                packer.loadItems(listItem.getList());
+                packer.fit();
+                if(packer.checkResult()){
+                    return ResponseEntity.ok(ECarType.TYPE_BIG);
+                }
+            }
+        }
+        if(listWeight<=ECarType.TYPE_SPECIAL.weight){
+            if(maxH<=ECarType.TYPE_SPECIAL.height){
+                packer = new Packer(ECarType.TYPE_SPECIAL.width,ECarType.TYPE_SPECIAL.depth);
+                packer.loadItems(listItem.getList());
+                packer.fit();
+                if(packer.checkResult()){
+                    return ResponseEntity.ok(ECarType.TYPE_SPECIAL);
+                }
+            }
+        }
+        return ResponseEntity.ok("NO");
     }
 }

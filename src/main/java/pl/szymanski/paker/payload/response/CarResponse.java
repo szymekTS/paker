@@ -6,16 +6,18 @@ public class CarResponse {
     private String model;
     private String licensePlate;
     private String carType;
+    private boolean inRepair;
 
     public CarResponse() {
     }
 
-    public CarResponse(String id, String brand, String model, String licensePlate, String carType) {
+    public CarResponse(String id, String brand, String model, String licensePlate, String carType, boolean inRepair) {
         this.id = id;
         this.brand = brand;
         this.model = model;
         this.licensePlate = licensePlate;
         this.carType = carType;
+        this.inRepair = inRepair;
     }
 
     public String getId() {
@@ -56,5 +58,13 @@ public class CarResponse {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public boolean isInRepair() {
+        return inRepair;
+    }
+
+    public void setInRepair(boolean inRepair) {
+        this.inRepair = inRepair;
     }
 }

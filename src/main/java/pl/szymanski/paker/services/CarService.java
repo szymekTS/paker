@@ -130,7 +130,7 @@ public class CarService {
     }
 
     private CarResponse carToCarResponse(Car car) {
-        return new CarResponse(car.getId(), car.getBrand(), car.getModel(), car.getLicensePlate(), car.getType().getType().name());
+        return new CarResponse(car.getId(), car.getBrand(), car.getModel(), car.getLicensePlate(), car.getType().getType().name(),car.isInRepair());
     }
 
     private Car carRequestToCar(CarRequest carRequest) {

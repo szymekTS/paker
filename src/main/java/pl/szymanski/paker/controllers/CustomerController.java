@@ -42,7 +42,7 @@ public class CustomerController {
     }
 
     @PostMapping("new")
-    public ResponseEntity<?> addUser(@Valid @RequestBody CustomerRequest newUser) {
+    public ResponseEntity<?> addUser2(@Valid @RequestBody CustomerRequest newUser) {
         return customerService.addCustomer(newUser);
     }
 

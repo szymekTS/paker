@@ -70,6 +70,10 @@ public class CustomerService {
     }
 
     public ResponseEntity<?> addCustomer(CustomerRequest newCustomer) {
+        System.out.println(newCustomer.getName());
+        System.out.println(newCustomer.getSurname());
+        System.out.println(newCustomer.getEmail());
+
         if (newCustomer.isValid()) {
 
             Customer customer = customerRequestToCustomer(newCustomer);

@@ -7,6 +7,7 @@ import pl.szymanski.paker.models.*;
 import pl.szymanski.paker.payload.request.OrderAddStatus;
 import pl.szymanski.paker.payload.request.OrderRequest;
 import pl.szymanski.paker.payload.response.MessageResponse;
+import pl.szymanski.paker.payload.response.OrderListItem;
 import pl.szymanski.paker.payload.response.OrderResponse;
 import pl.szymanski.paker.repository.*;
 
@@ -41,10 +42,10 @@ public class OrderService {
 
 
     public ResponseEntity<?> findAll() {
-        List<OrderResponse> responseList = new ArrayList<>();
+        List<OrderListItem> responseList = new ArrayList<>();
 
         for (Order u : order_R.findAll()) {
-            responseList.add(orderToOrderResponse(u));
+            responseList.add(orderToOrderListItem(u));
         }
         return ResponseEntity.ok(responseList);
     }
@@ -296,6 +297,18 @@ public class OrderService {
 
 
         return order;
+    }
+
+    private OrderListItem orderToOrderListItem(Order order){
+        OrderListItem listItem = new OrderListItem();
+        listItem.setId(order.getId());
+        listItem.setCar(order.getCar().getLicensePlate());
+        listItem.setCustomer(order.getCustomer().getEmail());
+        listItem.setOrigin(order.getOrigin().getName());
+        listItem.setDestiny(order.getDestiny().getName());
+        listItem.setLastStatus(order.getLastStatus().name());
+
+        return listItem;
     }
 
 

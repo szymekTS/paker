@@ -35,10 +35,14 @@ public class CustomerRequest {
     }
 
     public void setEmail(String email) {
-
+        this.email = email;
     }
 
     public boolean isValid() {
-        return !this.name.isEmpty() && !this.surname.isEmpty() && !this.email.isEmpty();
+        System.out.println(this.name);
+        System.out.println(this.surname);
+        System.out.println(this.email);
+
+        return this.email.length() >= 6;
     }
 }
