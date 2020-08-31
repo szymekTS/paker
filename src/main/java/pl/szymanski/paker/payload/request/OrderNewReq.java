@@ -1,33 +1,37 @@
-package pl.szymanski.paker.payload.response;
+package pl.szymanski.paker.payload.request;
 
-public class OrderListItem {
-    private String id;
+import pl.szymanski.paker.models.Item;
+
+import java.util.List;
+
+public class OrderNewReq {
+    private String creator;
     private String car;
+    private List<Item> cargo;
     private String customer;
     private String driver;
-    private String lastStatus;
     private String origin;
     private String destiny;
 
-    public OrderListItem() {
+    public OrderNewReq() {
     }
 
-    public OrderListItem(String id, String car, String customer, String driver, String lastStatus, String origin, String destiny) {
-        this.id = id;
+    public OrderNewReq(String creator, String car, List<Item> cargo, String customer, String driver, String origin, String destiny) {
+        this.creator = creator;
         this.car = car;
+        this.cargo = cargo;
         this.customer = customer;
         this.driver = driver;
-        this.lastStatus = lastStatus;
         this.origin = origin;
         this.destiny = destiny;
     }
 
-    public String getId() {
-        return id;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getCar() {
@@ -36,6 +40,14 @@ public class OrderListItem {
 
     public void setCar(String car) {
         this.car = car;
+    }
+
+    public List<Item> getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(List<Item> cargo) {
+        this.cargo = cargo;
     }
 
     public String getCustomer() {
@@ -52,14 +64,6 @@ public class OrderListItem {
 
     public void setDriver(String driver) {
         this.driver = driver;
-    }
-
-    public String getLastStatus() {
-        return lastStatus;
-    }
-
-    public void setLastStatus(String lastStatus) {
-        this.lastStatus = lastStatus;
     }
 
     public String getOrigin() {

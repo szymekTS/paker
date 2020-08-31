@@ -4,13 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.*;
+import pl.szymanski.paker.models.enums.EStatus;
 import pl.szymanski.paker.payload.request.OrderAddStatus;
+import pl.szymanski.paker.payload.request.OrderNewReq;
 import pl.szymanski.paker.payload.request.OrderRequest;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.payload.response.OrderListItem;
 import pl.szymanski.paker.payload.response.OrderResponse;
+import pl.szymanski.paker.payload.response.StatusList;
 import pl.szymanski.paker.repository.*;
 
+import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +40,6 @@ public class OrderService {
     private UserRepo user_R;
     @Autowired
     private CalculateRouteService pathFinder;
-
-    @Autowired
-    private OrderRepoImpl orderRepo;
 
 
     public ResponseEntity<?> findAll() {
@@ -136,7 +137,7 @@ public class OrderService {
     public ResponseEntity<?> findByStatusAndLocalization(String status, String location) {
         List<OrderResponse> responseList = new ArrayList<>();
 
-        for (Order u : orderRepo.findByStatusAndLocalization(status, location)) {
+        for (Order u : order_R.findByStatusAndLocalization(status, location)) {
             responseList.add(orderToOrderResponse(u));
         }
         return ResponseEntity.ok(responseList);
@@ -203,38 +204,27 @@ public class OrderService {
     }
 
 
-    public ResponseEntity<?> addNew(OrderRequest orderRequest) {
-        Order newOrder = orderRequestToOrder(orderRequest);
-        if (order_R.existsById(newOrder.getId())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Order exists"));
-        }
-        Route newRoute = pathFinder.calculateRoute(newOrder.getOrigin(), newOrder.getDestiny());
-        route_R.save(newRoute);
-        newOrder.setRoute(newRoute);
-        order_R.save(newOrder);
-        return ResponseEntity.ok(orderToOrderResponse(newOrder));
+    public ResponseEntity<?> addNew(OrderNewReq orderRequest) {
+        Order newOrder = orderNewRequestToOrder(orderRequest);
+        return ResponseEntity.ok(new MessageResponse("Dodano"));
     }
 
+
     public ResponseEntity<?> del(String id) {
-        if (order_R.existsById(id)) {
-            Optional<Order> optionalOrder = order_R.findById(id);
-            if (optionalOrder.isPresent()) {
-                Order order = optionalOrder.get();
-                for (Status status : order.getStatusList()) {
-                    status_R.deleteById(status.getId());
-                }
-                route_R.deleteById(order.getRoute().getId());
-                order_R.deleteById(id);
-            }
-            return ResponseEntity
-                    .ok(new MessageResponse("Deleted"));
+        Optional<Order> optionalOrder = order_R.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            order
         }
         return ResponseEntity
-                .badRequest()
-                .body(new MessageResponse("Not found"));
+                .ok(new MessageResponse("Deleted"));
     }
+        return ResponseEntity
+                .badRequest()
+                .
+
+    body(new MessageResponse("Not found"));
+}
 
     private OrderResponse orderToOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
@@ -299,11 +289,12 @@ public class OrderService {
         return order;
     }
 
-    private OrderListItem orderToOrderListItem(Order order){
+    private OrderListItem orderToOrderListItem(Order order) {
         OrderListItem listItem = new OrderListItem();
         listItem.setId(order.getId());
         listItem.setCar(order.getCar().getLicensePlate());
         listItem.setCustomer(order.getCustomer().getEmail());
+        listItem.setDriver(order.getDriver().getUsername());
         listItem.setOrigin(order.getOrigin().getName());
         listItem.setDestiny(order.getDestiny().getName());
         listItem.setLastStatus(order.getLastStatus().name());
@@ -311,18 +302,79 @@ public class OrderService {
         return listItem;
     }
 
+    private Order orderNewRequestToOrder(OrderNewReq orderRequest) {
+        Order newOrder = new Order();
+        Optional<Car> optionalCar = car_R.findById(orderRequest.getCar());
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            newOrder.setCar(car);
+            car.setFree(false);
+            car_R.save(car);
+        }
+
+        Optional<User> optionalDriver = user_R.findById(orderRequest.getDriver());
+        if (optionalDriver.isPresent()) {
+            User driver = optionalDriver.get();
+            newOrder.setDriver(driver);
+            driver.setFree(false);
+            user_R.save(driver);
+
+        }
+
+        Cargo newCargo = new Cargo(orderRequest.getCargo());
+        cargo_R.save(newCargo);
+        newOrder.setCargo(newCargo);
+
+        Optional<Customer> optionalCustomer = customer_R.findById(orderRequest.getCustomer());
+        if (optionalCustomer.isPresent()) {
+            newOrder.setCustomer(optionalCustomer.get());
+        }
+
+        Optional<City> optionalOrigin = city_R.findById(orderRequest.getOrigin());
+        if (optionalOrigin.isPresent()) {
+            newOrder.setOrigin(optionalOrigin.get());
+            newOrder.setLocalization(optionalOrigin.get());
+        }
+
+        Optional<City> optionalDestiny = city_R.findById(orderRequest.getDestiny());
+        if (optionalDestiny.isPresent()) {
+            newOrder.setDestiny(optionalDestiny.get());
+        }
+        Status newStatus = new Status();
+        Optional<User> optionalCreator = user_R.findById(orderRequest.getCreator());
+        if (optionalCreator.isPresent()) {
+            newStatus.setWorker(optionalCreator.get());
+            newStatus.setStatusCode(EStatus.STATUS_ACCEPTED);
+            newStatus.setComments(optionalCreator.get().getUsername() + " - Stworzono zamówienie");
+            status_R.save(newStatus);
+        }
+        List<Status> tmpStatus = newOrder.getStatusList();
+        tmpStatus.add(newStatus);
+        newOrder.setStatusList(tmpStatus);
+        newOrder.setLastStatus(newStatus.getStatusCode());
+
+
+        Route newRoute = pathFinder.calculateRoute(newOrder.getOrigin(), newOrder.getDestiny());
+        route_R.save(newRoute);
+        newOrder.setRoute(newRoute);
+        order_R.save(newOrder);
+
+
+        return newOrder;
+    }
+
 
     public ResponseEntity<?> addStatus(OrderAddStatus orderStatus) {
         Optional<Order> optionalOrder = order_R.findById(orderStatus.getOrderId());
         if (optionalOrder.isPresent()) {
             Optional<User> optionalUser = user_R.findById(orderStatus.getWorkerID());
-            if (optionalUser.isPresent()){
+            if (optionalUser.isPresent()) {
                 Order order = optionalOrder.get();
                 User user = optionalUser.get();
 
                 Status newStatus = new Status();
                 newStatus.setStatusCode(orderStatus.getStatus());
-                newStatus.setComments(orderStatus.getComment());
+                newStatus.setComments(user.getUsername() + " - " + orderStatus.getComment());
                 newStatus.setWorker(user);
 
                 status_R.save(newStatus);
@@ -332,6 +384,15 @@ public class OrderService {
                 order.setStatusList(statusList);
                 order.setLastStatus(orderStatus.getStatus());
 
+                if (order.getLastStatus() == EStatus.STATUS_DELETED || order.getLastStatus() == EStatus.STATUS_DELIVERED) {
+                    Car car = order.getCar();
+                    car.setFree(true);
+                    car_R.save(car);
+                    User driver = order.getDriver();
+                    driver.setFree(true);
+                    user_R.save(driver);
+                }
+
                 order_R.save(order);
                 return ResponseEntity
                         .ok()
@@ -340,6 +401,20 @@ public class OrderService {
             return ResponseEntity
                     .ok()
                     .body(new MessageResponse("Worker not found"));
+        }
+        return ResponseEntity
+                .ok()
+                .body(new MessageResponse("Order not found"));
+    }
+
+    public ResponseEntity<?> getStatusList(String id) {
+        Optional<Order> optionalOrder = order_R.findById(id);
+        if (optionalOrder.isPresent()) {
+            StatusList list = new StatusList();
+            list.setList(optionalOrder.get().getStatusList());
+            return ResponseEntity
+                    .ok()
+                    .body(list);
         }
         return ResponseEntity
                 .ok()

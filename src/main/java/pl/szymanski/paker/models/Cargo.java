@@ -1,6 +1,8 @@
 package pl.szymanski.paker.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -11,7 +13,7 @@ public class Cargo {
 
     @Id
     private String id;
-    private Set<Item> register = new HashSet<Item>();
+    private List<Item> register = new ArrayList<>();
 
     private float value;
     private float weight;
@@ -19,7 +21,7 @@ public class Cargo {
     public Cargo() {
     }
 
-    public Cargo(Set<Item> register) {
+    public Cargo(List<Item> register) {
         this.register = register;
         calculateValueAndWeight();
     }
@@ -32,11 +34,11 @@ public class Cargo {
         this.id = id;
     }
 
-    public Set<Item> getRegister() {
+    public List<Item> getRegister() {
         return register;
     }
 
-    public void setRegister(Set<Item> register) {
+    public void setRegister(List<Item> register) {
         this.register = register;
     }
 

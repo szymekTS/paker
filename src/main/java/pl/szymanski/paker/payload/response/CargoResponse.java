@@ -2,19 +2,21 @@ package pl.szymanski.paker.payload.response;
 
 import pl.szymanski.paker.models.Item;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CargoResponse {
     private String id;
-    private Set<Item> register = new HashSet<Item>();
+    private List<Item> register = new ArrayList<>();
     private float value;
     private float weight;
 
     public CargoResponse() {
     }
 
-    public CargoResponse(String id, Set<Item> register, float value, float weight) {
+    public CargoResponse(String id, List<Item> register, float value, float weight) {
         this.id = id;
         this.register = register;
         this.value = value;
@@ -29,11 +31,11 @@ public class CargoResponse {
         this.id = id;
     }
 
-    public Set<Item> getRegister() {
+    public List<Item> getRegister() {
         return register;
     }
 
-    public void setRegister(Set<Item> register) {
+    public void setRegister(List<Item> register) {
         this.register = register;
     }
 

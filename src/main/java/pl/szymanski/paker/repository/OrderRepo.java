@@ -1,6 +1,7 @@
 package pl.szymanski.paker.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import pl.szymanski.paker.models.*;
 import pl.szymanski.paker.payload.request.CargoRequest;
 
@@ -19,4 +20,7 @@ public interface OrderRepo extends MongoRepository<Order, String> {
     List<Order> findByDestiny(City city);
 
     List<Order> findByLocalization(String localization);
+
+    @Query(value = "{'lastStatus': ?0, 'localization': ?1}")
+    List<Order> findByStatusAndLocalization(String status, String location);
 }

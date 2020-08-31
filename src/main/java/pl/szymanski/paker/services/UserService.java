@@ -120,6 +120,15 @@ public class UserService {
                 .body(new MessageResponse("Not Found"));
     }
 
+    public ResponseEntity<?> findDriverLoc(String localization) {
+        List<UserResponse> responseList = new ArrayList<UserResponse>();
+
+        for (User u : user_R.findDriverByFreeAndLocalization(true,true,localization)) {
+            responseList.add(userToUserResponse(u));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
     public ResponseEntity<?> addUser(UserRequest newUser) {
         if (newUser.isValid()) {
 
@@ -186,7 +195,7 @@ public class UserService {
                 toUpdate.setName(user.getName());
                 toUpdate.setSurname(user.getSurname());
                 toUpdate.setNumber(user.getNumber());
-
+                toUpdate.setDriver(user.isDriver());
                 toUpdate.setRoles(user.getRoles());
                 user_R.save(toUpdate);
                 return ResponseEntity.ok(userToUserResponse(toUpdate));
@@ -238,7 +247,10 @@ public class UserService {
         nowy.setSurname(user.getSurname());
         nowy.setNumber(user.getNumber());
         nowy.setLocalization(user.getLocalization());
-        nowy.setFree(user.getFree());
+        nowy.setFree(user.getIsFree());
+
+        nowy.setDriver(user.getIsDriver());
+
 
         nowy.setRoles(tmp);
         return nowy;
@@ -255,6 +267,7 @@ public class UserService {
         user.setEmail(userObj.getEmail());
         user.setLocalization(userObj.getLocalization());
         user.setFree(userObj.isFree());
+        user.setDriver(userObj.isDriver());
         Set<String> tmp = new HashSet<String>();
         for (Role role : userObj.getRoles()) {
             tmp.add(role.getName().name());
@@ -276,10 +289,12 @@ public class UserService {
         nowy.setNumber(user.getNumber());
         nowy.setEmail(user.getEmail());
         nowy.setLocalization(user.getLocalization());
+        nowy.setDriver(user.getIsDriver());
 
         nowy.setRoles(tmp);
         return nowy;
     }
+
 
 
 }

@@ -1,5 +1,7 @@
 package pl.szymanski.paker.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +13,12 @@ public class UserUpdate {
     private String email;
     private List<String> roles = new ArrayList<>();
     private String localization;
+    private Boolean isDriver;
 
     public UserUpdate() {
     }
 
-    public UserUpdate(String userName, String name, String surname, String number, String email, List<String> roles, String localization) {
+    public UserUpdate(String userName, String name, String surname, String number, String email, List<String> roles, String localization, Boolean isDriver) {
         this.userName = userName;
         this.name = name;
         this.surname = surname;
@@ -23,6 +26,8 @@ public class UserUpdate {
         this.email = email;
         this.roles = roles;
         this.localization = localization;
+        this.isDriver = isDriver;
+
     }
 
     public String getUserName() {
@@ -79,6 +84,14 @@ public class UserUpdate {
 
     public void setLocalization(String localization) {
         this.localization = localization;
+    }
+
+    public Boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(Boolean driver) {
+        isDriver = driver;
     }
 
     public boolean isValid(){

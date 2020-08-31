@@ -1,22 +1,24 @@
 package pl.szymanski.paker.payload.request;
 
+import pl.szymanski.paker.models.Item;
+
 import java.util.List;
 
 public class CargoCheckType {
-    List<CargoItem> list;
+    List<Item> list;
 
     public CargoCheckType() {
     }
 
-    public CargoCheckType(List<CargoItem> list) {
+    public CargoCheckType(List<Item> list) {
         this.list = list;
     }
 
-    public List<CargoItem> getList() {
+    public List<Item> getList() {
         return list;
     }
 
-    public void setList(List<CargoItem> list) {
+    public void setList(List<Item> list) {
         this.list = list;
     }
 }

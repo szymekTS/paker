@@ -67,6 +67,7 @@ public class DBLoaderController {
                 admin.setLocalization(city.getId());
             }
             admin.setRoles(roles);
+            admin.setDriver(true);
             user_R.save(admin);
         }
         return ResponseEntity
@@ -219,8 +220,8 @@ public class DBLoaderController {
         City miasto61 = new City("Konin", "62-500", prov_R.findByName(EProvince.PROV_WIELKOPOLSKIE));
         City miasto62 = new City("Leszno", "64-100", prov_R.findByName(EProvince.PROV_WIELKOPOLSKIE));
         City miasto63 = new City("Poznań", "60-001", prov_R.findByName(EProvince.PROV_WIELKOPOLSKIE));
-        City miasto64 = new City("Koszalin", "75-001", prov_R.findByName(EProvince.PROV_ZACHODNIOPOMORSKIE));
-        City miasto65 = new City("Szczecin", "70-001", prov_R.findByName(EProvince.PROV_ZACHODNIOPOMORSKIE));
+        City miasto64 = new City("Szczecin", "70-001", prov_R.findByName(EProvince.PROV_ZACHODNIOPOMORSKIE));
+        City miasto65 = new City("Koszalin", "75-001", prov_R.findByName(EProvince.PROV_ZACHODNIOPOMORSKIE));
         City miasto66 = new City("Świnoujście", "72-600", prov_R.findByName(EProvince.PROV_ZACHODNIOPOMORSKIE));
 
 
@@ -257,7 +258,7 @@ public class DBLoaderController {
         miasto66.addNeighbours(miasto64, 106.0);// Swinoujscie = szczecin
         miasto66.addNeighbours(miasto65, 165.0);// Swinoujście = Koszalin
 
-        miasto65.addNeighbours(miasto64, 171.0);// szczecin = koszalin
+        miasto65.addNeighbours(miasto64, 171.0);// koszalin = szczecin
         miasto65.addNeighbours(miasto36, 68.2);// koszalin = słupsk
 
         miasto64.addNeighbours(miasto13, 110.0);// szczecin = gorzów wielkopolski
@@ -283,7 +284,7 @@ public class DBLoaderController {
         miasto59.addNeighbours(miasto58, 110.0); //olsztyn = elblag
         miasto59.addNeighbours(miasto6, 138.0); //olsztyn = grudziadz
         miasto59.addNeighbours(miasto21, 126.0); //olsztyn = ostroleka
-        miasto59.addNeighbours(miasto21, 198.0); //olsztyn = suwałki
+        miasto59.addNeighbours(miasto33, 198.0); //olsztyn = suwałki
 
         miasto58.addNeighbours(miasto6,105.0); //elblag = grudziadz
         miasto58.addNeighbours(miasto34,60.2); //elblag = gdansk
@@ -292,6 +293,8 @@ public class DBLoaderController {
         miasto57.addNeighbours(miasto18,127.0); //kielce = kraków
         miasto57.addNeighbours(miasto20,118.0); //kielce = tarnów
         miasto57.addNeighbours(miasto30,103.0); //kielce = tarnogrzeg
+        miasto57.addNeighbours(miasto16,96.9); //kielce = tarnogrzeg
+
 
         miasto56.addNeighbours(miasto50,13.7); //żory = rybnik
         miasto56.addNeighbours(miasto44,16.2); //żory = jastrzębie-zdrój

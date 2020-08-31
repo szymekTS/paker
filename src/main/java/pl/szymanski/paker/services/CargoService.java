@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.algorithm.BinPacker.Packer;
 import pl.szymanski.paker.models.Cargo;
+import pl.szymanski.paker.models.Item;
 import pl.szymanski.paker.models.enums.ECarType;
-import pl.szymanski.paker.payload.request.CargoItem;
 import pl.szymanski.paker.payload.request.CargoRequest;
 import pl.szymanski.paker.payload.request.CargoCheckType;
 import pl.szymanski.paker.payload.response.CargoResponse;
@@ -22,7 +22,6 @@ public class CargoService {
 
     @Autowired
     private CargoRepo cargo_R;
-
 
     public ResponseEntity<?> findAll() {
         List<CargoResponse> responseList = new ArrayList<>();
@@ -112,7 +111,7 @@ public class CargoService {
         Packer packer;
         float maxH =0f;
         float listWeight=0f;
-        for(CargoItem item : listItem.getList()){
+        for(Item item : listItem.getList()){
             if(item.height>maxH){
                 maxH = item.height;
             }

@@ -9,6 +9,7 @@ public class OrderRequest {
     private String car;
     private String cargo;
     private String customer;
+    private String driver;
     private List<String> statusList;
     private EStatus lastStatus;
     private String localization;

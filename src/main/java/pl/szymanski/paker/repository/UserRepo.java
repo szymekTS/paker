@@ -36,4 +36,7 @@ public interface UserRepo extends MongoRepository<User, String> {
     List<User> findByIsFree(Boolean isFree);
 
     List<User> findByLocalization(String localization);
+
+    @Query(value = "{'isFree': ?0, 'isDriver': ?1, 'localization': ?2}")
+    List<User> findDriverByFreeAndLocalization(Boolean free, Boolean driver, String localization);
 }

@@ -76,7 +76,6 @@ public class CityService {
         City city;
         if (cityOptional.isPresent()) {
             city = cityOptional.get();
-            System.out.println(city);
             ncityResponse = cityToNCityResponse(city);
             return ResponseEntity
                     .ok(ncityResponse);

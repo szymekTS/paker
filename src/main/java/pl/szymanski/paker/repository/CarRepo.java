@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import pl.szymanski.paker.models.Car;
 import pl.szymanski.paker.models.CarType;
+import pl.szymanski.paker.models.enums.ECarType;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +25,9 @@ public interface CarRepo extends MongoRepository<Car, String> {
     Optional<Car> findByLicensePlate(String plate);
 
     boolean existsByLicensePlate(String licensePlate);
+
+    List<Car> findByLocalization(String localization);
+
+    @Query(value = "{'localization': ?0, 'type.id': ?1, 'inRepair': ?2, 'isFree': ?3}")
+    List<Car> findGoodFreeCarInLoc(String localization, String type, Boolean inRepair, Boolean isFree);
 }

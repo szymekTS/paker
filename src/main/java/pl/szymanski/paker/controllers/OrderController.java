@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szymanski.paker.payload.request.OrderAddStatus;
+import pl.szymanski.paker.payload.request.OrderNewReq;
 import pl.szymanski.paker.payload.request.OrderRequest;
 import pl.szymanski.paker.services.OrderService;
 
@@ -51,6 +52,12 @@ public class OrderController {
     public ResponseEntity<?> findByStatusAndLocalization(@RequestParam String status, @RequestParam String localization) {
         return orderService.findByStatusAndLocalization(status, localization);
     }
+
+    @GetMapping("get_statuslist")
+    public ResponseEntity<?> getstatus(@RequestParam String id) {
+        return orderService.getStatusList(id);
+    }
+
     @GetMapping("find_location")
     public ResponseEntity<?> findByLocation(@RequestParam String location) {
         return orderService.findByLocation(location);
@@ -78,7 +85,7 @@ public class OrderController {
     }
 
     @PostMapping("new")
-    public ResponseEntity<?> addNew(@RequestBody OrderRequest orderRequest){
+    public ResponseEntity<?> addNew(@RequestBody OrderNewReq orderRequest){
         return orderService.addNew(orderRequest);
     }
 }

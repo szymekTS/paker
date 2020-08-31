@@ -67,6 +67,11 @@ public class UserController {
         return userService.findByLocalization(localization);
     }
 
+    @GetMapping("find_driver_loc")
+    public ResponseEntity<?> findDriverLoc(@RequestParam String localization) {
+        return userService.findDriverLoc(localization);
+    }
+
     @GetMapping("find_number")
     public ResponseEntity<?> findByNumber(@RequestParam String number) {
         return userService.findByNumber(number);

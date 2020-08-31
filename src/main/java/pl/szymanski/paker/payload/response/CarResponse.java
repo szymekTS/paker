@@ -6,18 +6,22 @@ public class CarResponse {
     private String model;
     private String licensePlate;
     private String carType;
+    private String localization;
     private boolean inRepair;
+    private boolean isFree;
 
     public CarResponse() {
     }
 
-    public CarResponse(String id, String brand, String model, String licensePlate, String carType, boolean inRepair) {
+    public CarResponse(String id, String brand, String model, String licensePlate, String carType, String localization, boolean inRepair, boolean isFree) {
         this.id = id;
         this.brand = brand;
         this.model = model;
         this.licensePlate = licensePlate;
         this.carType = carType;
+        this.localization = localization;
         this.inRepair = inRepair;
+        this.isFree = isFree;
     }
 
     public String getId() {
@@ -60,11 +64,27 @@ public class CarResponse {
         this.carType = carType;
     }
 
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
     public boolean isInRepair() {
         return inRepair;
     }
 
     public void setInRepair(boolean inRepair) {
         this.inRepair = inRepair;
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
     }
 }

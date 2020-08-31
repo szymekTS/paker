@@ -13,11 +13,12 @@ public class UserRequest {
     private Set<String> roles = new HashSet<>();
     private String localization;
     private Boolean isFree = true;
+    private Boolean isDriver;
 
     public UserRequest() {
     }
 
-    public UserRequest(String userName, String name, String surname, String number, String email, String password, Set<String> roles, String localization, Boolean isFree) {
+    public UserRequest(String userName, String name, String surname, String number, String email, String password, Set<String> roles, String localization, Boolean isFree, Boolean isDriver) {
         this.userName = userName;
         this.name = name;
         this.surname = surname;
@@ -27,6 +28,7 @@ public class UserRequest {
         this.roles = roles;
         this.localization = localization;
         this.isFree = isFree;
+        this.isDriver = isDriver;
     }
 
     public String getUserName() {
@@ -93,12 +95,20 @@ public class UserRequest {
         this.localization = localization;
     }
 
-    public Boolean getFree() {
+    public Boolean getIsFree() {
         return isFree;
     }
 
-    public void setFree(Boolean free) {
+    public void setIsFree(Boolean free) {
         isFree = free;
+    }
+
+    public Boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(Boolean driver) {
+        isDriver = driver;
     }
 
     public boolean isValid() {

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.szymanski.paker.models.enums.EStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class Order {
     @DBRef
     private Customer customer;
     @DBRef
-    private List<Status> statusList;
+    private User driver;
+    @DBRef
+    private List<Status> statusList = new ArrayList<>();
 
     private EStatus lastStatus;
     @DBRef
@@ -132,6 +135,14 @@ public class Order {
 
     public void setLocalization(City localization) {
         this.localization = localization;
+    }
+
+    public User getDriver() {
+        return driver;
+    }
+
+    public void setDriver(User driver) {
+        this.driver = driver;
     }
 
     public Date getEndTime() {

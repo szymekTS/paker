@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szymanski.paker.models.Car;
 import pl.szymanski.paker.models.CarType;
+import pl.szymanski.paker.models.enums.ECarType;
 import pl.szymanski.paker.payload.request.CarRequest;
+import pl.szymanski.paker.payload.request.CarUpdate;
 import pl.szymanski.paker.payload.response.CarResponse;
 import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.repository.CarRepo;
@@ -89,12 +91,37 @@ public class CarService {
                         .badRequest()
                         .body(new MessageResponse("Car exists"));
             }
+            car.setFree(true);
             car_R.save(car);
             return ResponseEntity.ok(carToCarResponse(car));
         }
         return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Not valid request"));
+    }
+    public ResponseEntity<?> findByLoc(String localization) {
+        List<CarResponse> responseList = new ArrayList<>();
+
+        for (Car c : car_R.findByLocalization(localization)) {
+            responseList.add(carToCarResponse(c));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    public ResponseEntity<?> findGoodLoc(String localization, ECarType type) {
+        List<CarResponse> responseList = new ArrayList<>();
+
+        Optional<CarType> carTypeOptional = carType_R.findByType(type);
+
+        if(carTypeOptional.isPresent()){
+            CarType carType = carTypeOptional.get();
+            for (Car c : car_R.findGoodFreeCarInLoc(localization, carType.getId(), false,true)) {
+                responseList.add(carToCarResponse(c));
+            }
+        }
+
+
+        return ResponseEntity.ok(responseList);
     }
 
     public ResponseEntity<?> del(String id) {
@@ -108,29 +135,23 @@ public class CarService {
                 .body(new MessageResponse("Not found"));
     }
 
-    public ResponseEntity<?> update(CarRequest updateCar) {
-        if (updateCar.idValid()) {
-            Car car = carRequestToCar(updateCar);
-            Optional<Car> carOptional = car_R.findByLicensePlate(car.getLicensePlate());
-            if (carOptional.isPresent()) {
-                Car toUpdateCar = carOptional.get();
-                toUpdateCar.setBrand(car.getBrand());
-                toUpdateCar.setModel(car.getModel());
-                toUpdateCar.setType(car.getType());
-                car_R.save(toUpdateCar);
-                return ResponseEntity.ok(carToCarResponse(toUpdateCar));
-            }
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Not found"));
+    public ResponseEntity<?> update(CarUpdate updateCar) {
+        Optional<Car> carOptional = car_R.findById(updateCar.getId());
+        if (carOptional.isPresent()) {
+            Car toUpdateCar = carOptional.get();
+            toUpdateCar.setLocalization(updateCar.getLocalization());
+            toUpdateCar.setInRepair(updateCar.isRepairing());
+            toUpdateCar.setFree(updateCar.isFree());
+            car_R.save(toUpdateCar);
+            return ResponseEntity.ok(carToCarResponse(toUpdateCar));
         }
         return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Not valid request"));
+                .body(new MessageResponse("Not found"));
     }
 
     private CarResponse carToCarResponse(Car car) {
-        return new CarResponse(car.getId(), car.getBrand(), car.getModel(), car.getLicensePlate(), car.getType().getType().name(),car.isInRepair());
+        return new CarResponse(car.getId(), car.getBrand(), car.getModel(), car.getLicensePlate(), car.getType().getType().name(), car.getLocalization(), car.isInRepair(), car.isFree());
     }
 
     private Car carRequestToCar(CarRequest carRequest) {
@@ -138,8 +159,12 @@ public class CarService {
         car.setBrand(carRequest.getBrand());
         car.setModel(carRequest.getModel());
         car.setLicensePlate(carRequest.getLicensePlate());
+        car.setLocalization(carRequest.getLocalization());
         CarType carType = carType_R.findByType(carRequest.getCarType());
         car.setType(carType);
         return car;
     }
+
+
+
 }

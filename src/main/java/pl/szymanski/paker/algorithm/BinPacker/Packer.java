@@ -1,8 +1,10 @@
 package pl.szymanski.paker.algorithm.BinPacker;
 
-import pl.szymanski.paker.payload.request.CargoItem;
+import pl.szymanski.paker.models.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Packer {
@@ -16,8 +18,9 @@ public class Packer {
         nodeList = new ArrayList<>();
     }
 
-    public void loadItems(List<CargoItem> itemList) {
-        for (CargoItem item : itemList) {
+    public void loadItems(List<Item> itemList) {
+        itemList.sort(new AreaComparator());
+        for (Item item : itemList) {
             nodeList.add(new Node(item.width, item.depth));
         }
     }
@@ -63,4 +66,13 @@ public class Packer {
         return node;
     }
 
+}
+
+class AreaComparator implements Comparator<Item> {
+    @Override
+    public int compare(Item o1, Item o2) {
+        Float area1 = o1.width* o1.depth;
+        Float area2 = o2.width* o2.depth;
+        return area1.compareTo(area2);
+    }
 }

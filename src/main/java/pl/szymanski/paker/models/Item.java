@@ -1,6 +1,7 @@
 package pl.szymanski.paker.models;
 
 public class Item {
+
     private String name;
     public float width;
     public float depth;

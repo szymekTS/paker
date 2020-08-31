@@ -19,18 +19,29 @@ public class Car {
 
 	@DBRef
 	private CarType type;
-
+	private String localization;
 	private boolean inRepair;
+	private boolean isFree;
 
 	public Car() {
 	}
 
-	public Car(String brand, String model, String licensePlate, CarType type) {
+	public Car(String brand, String model, String licensePlate,String localization, CarType type) {
 		this.brand = brand;
 		this.model = model;
 		this.licensePlate = licensePlate;
+		this.localization = localization;
 		setType(type);
 		this.inRepair = false;
+		this.isFree = true;
+	}
+
+	public String getLocalization() {
+		return localization;
+	}
+
+	public void setLocalization(String localization) {
+		this.localization = localization;
 	}
 
 	public String getId() {
@@ -94,5 +105,13 @@ public class Car {
 
 	public void setInRepair(boolean inRepair) {
 		this.inRepair = inRepair;
+	}
+
+	public boolean isFree() {
+		return isFree;
+	}
+
+	public void setFree(boolean free) {
+		isFree = free;
 	}
 }

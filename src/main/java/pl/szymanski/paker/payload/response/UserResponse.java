@@ -12,14 +12,12 @@ public class UserResponse {
     private Set<String> roles;
     private String localization;
     private Boolean isFree;
+    private Boolean isDriver;
 
     public UserResponse() {
     }
 
-    public UserResponse(String id, String username, String name, String surname, String number, String email, String localization, boolean free) {
-    }
-
-    public UserResponse(String id, String userName, String name, String surname, String number, String email, Set<String> roles, String localization, Boolean isFree) {
+    public UserResponse(String id, String userName, String name, String surname, String number, String email, Set<String> roles, String localization, Boolean isFree, Boolean isDriver) {
         this.id = id;
         this.userName = userName;
         this.name = name;
@@ -29,6 +27,7 @@ public class UserResponse {
         this.roles = roles;
         this.localization = localization;
         this.isFree = isFree;
+        this.isDriver = isDriver;
     }
 
     public String getId() {
@@ -101,5 +100,13 @@ public class UserResponse {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public Boolean getDriver() {
+        return isDriver;
+    }
+
+    public void setDriver(Boolean driver) {
+        isDriver = driver;
     }
 }

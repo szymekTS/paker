@@ -35,6 +35,7 @@ public class User {
 
     private boolean isFree = true;
 
+    private boolean isDriver = false;
 
     @NotBlank
     @Size(max = 120)
@@ -145,5 +146,13 @@ public class User {
 
     public void setFree(boolean free) {
         isFree = free;
+    }
+
+    public boolean isDriver() {
+        return isDriver;
+    }
+
+    public void setDriver(boolean driver) {
+        isDriver = driver;
     }
 }

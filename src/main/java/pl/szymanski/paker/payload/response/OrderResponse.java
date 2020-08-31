@@ -10,6 +10,7 @@ public class OrderResponse {
     private String car;
     private String cargo;
     private String customer;
+    private String driver;
     private List<String> statusList;
     private String lastStatus;
     private String localization;
