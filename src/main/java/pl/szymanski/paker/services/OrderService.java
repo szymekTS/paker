@@ -8,13 +8,9 @@ import pl.szymanski.paker.models.enums.EStatus;
 import pl.szymanski.paker.payload.request.OrderAddStatus;
 import pl.szymanski.paker.payload.request.OrderNewReq;
 import pl.szymanski.paker.payload.request.OrderRequest;
-import pl.szymanski.paker.payload.response.MessageResponse;
-import pl.szymanski.paker.payload.response.OrderListItem;
-import pl.szymanski.paker.payload.response.OrderResponse;
-import pl.szymanski.paker.payload.response.StatusList;
+import pl.szymanski.paker.payload.response.*;
 import pl.szymanski.paker.repository.*;
 
-import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -135,10 +131,19 @@ public class OrderService {
     }
 
     public ResponseEntity<?> findByStatusAndLocalization(String status, String location) {
-        List<OrderResponse> responseList = new ArrayList<>();
+        List<OrderListItem> responseList = new ArrayList<>();
 
         for (Order u : order_R.findByStatusAndLocalization(status, location)) {
-            responseList.add(orderToOrderResponse(u));
+            responseList.add(orderToOrderListItem(u));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    public ResponseEntity<?> findByDriver(String driver) {
+        List<OrderListItem> responseList = new ArrayList<>();
+
+        for (Order u : order_R.findByDriver(driver)) {
+            responseList.add(orderToOrderListItem(u));
         }
         return ResponseEntity.ok(responseList);
     }
@@ -208,23 +213,6 @@ public class OrderService {
         Order newOrder = orderNewRequestToOrder(orderRequest);
         return ResponseEntity.ok(new MessageResponse("Dodano"));
     }
-
-
-    public ResponseEntity<?> del(String id) {
-        Optional<Order> optionalOrder = order_R.findById(id);
-        if (optionalOrder.isPresent()) {
-            Order order = optionalOrder.get();
-            order
-        }
-        return ResponseEntity
-                .ok(new MessageResponse("Deleted"));
-    }
-        return ResponseEntity
-                .badRequest()
-                .
-
-    body(new MessageResponse("Not found"));
-}
 
     private OrderResponse orderToOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
@@ -359,7 +347,6 @@ public class OrderService {
         newOrder.setRoute(newRoute);
         order_R.save(newOrder);
 
-
         return newOrder;
     }
 
@@ -419,5 +406,38 @@ public class OrderService {
         return ResponseEntity
                 .ok()
                 .body(new MessageResponse("Order not found"));
+    }
+
+    public ResponseEntity<?> getCargo(String id) {
+        Optional<Order> optionalOrder = order_R.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            CargoResponse cargo = new CargoResponse();
+            cargo.setId(order.getCargo().getId());
+            cargo.setValue(order.getCargo().getValue());
+            cargo.setWeight(order.getCargo().getWeight());
+            cargo.setRegister(order.getCargo().getRegister());
+            return ResponseEntity
+                    .ok()
+                    .body(cargo);
+        }
+        return ResponseEntity
+                .ok()
+                .body(new MessageResponse("Order not found"));
+    }
+
+    public ResponseEntity<?> getRoute(String id) {
+        Optional<Order> optionalOrder = order_R.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+
+            return ResponseEntity
+                    .ok()
+                    .body(order.getRoute());
+        }
+        return ResponseEntity
+                .ok()
+                .body(new MessageResponse("Order not found"));
+
     }
 }

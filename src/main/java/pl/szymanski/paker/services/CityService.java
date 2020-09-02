@@ -33,12 +33,11 @@ public class CityService {
     }
 
     public ResponseEntity<?> findByName(String name) {
-        List<CityResponse> responseList = new ArrayList<>();
-
-        for (City c : city_R.findByNameRegex(name)) {
-            responseList.add(cityToCityResponse(c));
-        }
-        return ResponseEntity.ok(responseList);
+        Optional<City> city = city_R.findByName(name);
+        if (city.isPresent())
+            return ResponseEntity.ok(cityToCityResponse(city.get()));
+        else
+            return ResponseEntity.ok("");
     }
 
     public ResponseEntity<?> findByZipCode(String zipCode) {

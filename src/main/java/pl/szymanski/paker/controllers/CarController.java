@@ -57,6 +57,10 @@ public class CarController {
     public ResponseEntity<?> findGoodLoc(@RequestParam String localization, @RequestParam ECarType type) {
         return carService.findGoodLoc(localization, type);
     }
+    @GetMapping("find_broken_loc")
+    public ResponseEntity<?> findBrokenLoc(@RequestParam String localization) {
+        return carService.findBrokenLoc(localization);
+    }
 
     @PostMapping("new")
     public ResponseEntity<?> addCar(@Valid @RequestBody CarRequest newCar) {
@@ -68,12 +72,7 @@ public class CarController {
         return carService.del(id);
     }
 
-    @PostMapping("update")
-    public ResponseEntity<?> updateCar(@Valid @RequestBody CarUpdate updateCar) {
-        return carService.update(updateCar);
-    }
-
-    @PostMapping("updejt")
+    @PostMapping("update_car")
     public ResponseEntity<?> updateCar2(@Valid @RequestBody CarUpdate updateCar) {
         return carService.update(updateCar);
     }

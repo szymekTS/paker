@@ -32,8 +32,9 @@ public class OrderController {
 
     @GetMapping("find_cargo_value")
     public ResponseEntity<?> findByCargoValue(@RequestParam float min, @RequestParam float max) {
-        return orderService.findByCargoValue(min,max);
+        return orderService.findByCargoValue(min, max);
     }
+
     @GetMapping("find_cargo_weight")
     public ResponseEntity<?> findByCargoWeigh(@RequestParam float min, @RequestParam float max) {
         return orderService.findByCargoWeight(min, max);
@@ -48,44 +49,60 @@ public class OrderController {
     public ResponseEntity<?> findByStatus(@RequestParam String status) {
         return orderService.findByStatus(status);
     }
-    @GetMapping("find_status_localization/")
+
+    @GetMapping("find_status_localization")
     public ResponseEntity<?> findByStatusAndLocalization(@RequestParam String status, @RequestParam String localization) {
         return orderService.findByStatusAndLocalization(status, localization);
     }
+
+    @GetMapping("find_driver")
+    public ResponseEntity<?> findByDriver(@RequestParam String driver) {
+        return orderService.findByDriver(driver);
+    }
+
 
     @GetMapping("get_statuslist")
     public ResponseEntity<?> getstatus(@RequestParam String id) {
         return orderService.getStatusList(id);
     }
 
+    @GetMapping("get_cargo")
+    public ResponseEntity<?> getCargo(@RequestParam String id) {
+        return orderService.getCargo(id);
+    }
+
+    @GetMapping("get_route")
+    public ResponseEntity<?> getRoute(@RequestParam String id) {
+        return orderService.getRoute(id);
+    }
+
     @GetMapping("find_location")
     public ResponseEntity<?> findByLocation(@RequestParam String location) {
         return orderService.findByLocation(location);
     }
+
     @GetMapping("find_origin")
     public ResponseEntity<?> findByOrigin(@RequestParam String origin) {
         return orderService.findByOrigin(origin);
     }
+
     @GetMapping("find_destiny")
     public ResponseEntity<?> findByDestiny(@RequestParam String destiny) {
         return orderService.findByDestiny(destiny);
     }
+
     @PostMapping("update")
     public ResponseEntity<?> update(@RequestBody OrderRequest orderRequest) {
         return orderService.update(orderRequest);
     }
+
     @PostMapping("add_Status")
     public ResponseEntity<?> update(@RequestBody OrderAddStatus orderStatus) {
         return orderService.addStatus(orderStatus);
     }
 
-    @DeleteMapping("del")
-    public ResponseEntity<?> del(@RequestParam String id) {
-        return orderService.del(id);
-    }
-
     @PostMapping("new")
-    public ResponseEntity<?> addNew(@RequestBody OrderNewReq orderRequest){
+    public ResponseEntity<?> addNew(@RequestBody OrderNewReq orderRequest) {
         return orderService.addNew(orderRequest);
     }
 }

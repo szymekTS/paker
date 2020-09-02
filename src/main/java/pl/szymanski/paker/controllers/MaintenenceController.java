@@ -45,7 +45,7 @@ public class MaintenenceController {
     }
 
     @GetMapping("change_status")
-    public ResponseEntity<?> changeStatus(@RequestParam  String mainId) {
-        return maintanenceService.changeStatus(mainId);
+    public ResponseEntity<?> changeStatus(@RequestParam  String id) {
+        return maintanenceService.changeStatus(id);
     }
 }

@@ -23,4 +23,7 @@ public interface OrderRepo extends MongoRepository<Order, String> {
 
     @Query(value = "{'lastStatus': ?0, 'localization': ?1}")
     List<Order> findByStatusAndLocalization(String status, String location);
+
+    @Query("{'$or': [{'lastStatus':'STATUS_PACKING'},{'lastStatus':'STATUS_TRANSPORTING'}], 'driver.id': ?0}")
+    List<Order> findByDriver(String driver);
 }

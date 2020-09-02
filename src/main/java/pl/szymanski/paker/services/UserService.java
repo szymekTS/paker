@@ -210,17 +210,12 @@ public class UserService {
     }
 
     public ResponseEntity<?> updateLocalization(UserChangeLocalization localization) {
-        System.out.println(localization.getId()+" "+localization.getNewLocalization());
         Optional<User> optionalUser = user_R.findById(localization.getId());
         if (optionalUser.isPresent()) {
-            System.out.println("user optional present");
             Optional<City> cityOptional = city_R.findById(localization.getNewLocalization());
             if(cityOptional.isPresent()){
-                System.out.println("city optional present");
                 User user = optionalUser.get();
-                System.out.println(user.getUsername());
                 City city = cityOptional.get();
-                System.out.println(city.getName());
 
                 user.setLocalization(city.getId());
                 user_R.save(user);

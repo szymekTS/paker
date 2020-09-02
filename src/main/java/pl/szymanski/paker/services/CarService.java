@@ -166,5 +166,11 @@ public class CarService {
     }
 
 
-
+    public ResponseEntity<?> findBrokenLoc(String localization) {
+        List<CarResponse> responseList = new ArrayList<>();
+        for (Car c : car_R.findBrokenCarInLoc(localization,true)) {
+            responseList.add(carToCarResponse(c));
+        }
+        return ResponseEntity.ok(responseList);
+    }
 }

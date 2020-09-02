@@ -49,7 +49,7 @@ public class MaintenanceService {
 
     public ResponseEntity<?> findByCar(String carId) {
         List<MaintenenceResponse> responseList = new ArrayList<>();
-        Optional<Car> carOptional = car_R.findById(carId);
+        Optional<Car> carOptional = car_R.findByLicensePlate(carId);
         if(carOptional.isPresent()){
             Car car = carOptional.get();
             for( Maintenance m : maintenance_R.findByCar(car)) {
@@ -78,8 +78,11 @@ public class MaintenanceService {
                         .badRequest()
                         .body(new MessageResponse("Car not exist"));
             }
+            Car car = maintenance.getCar();
+            car.setInRepair(true);
+            car_R.save(car);
             maintenance_R.save(maintenance);
-            return ResponseEntity.ok(mainToMainResponse(maintenance));
+            return ResponseEntity.ok(new MessageResponse("Dodano zlecenie naprawy"));
         }
         return ResponseEntity
                 .badRequest()
@@ -110,6 +113,9 @@ public class MaintenanceService {
                     break;
                 case INPROGRES:
                     maintenance.setStatus(ERepair.DONE);
+                    Car car = maintenance.getCar();
+                    car.setInRepair(false);
+                    car_R.save(car);
                     break;
             }
             maintenance_R.save(maintenance);
@@ -121,7 +127,7 @@ public class MaintenanceService {
     }
 
     private MaintenenceResponse mainToMainResponse(Maintenance maintenance){
-        return new MaintenenceResponse(maintenance.getId(), maintenance.getCar().getId(), maintenance.getProblemDescription(), maintenance.getStatus(), maintenance.getStartTime(), maintenance.getDoneTime());
+        return new MaintenenceResponse(maintenance.getId(), maintenance.getCar().getLicensePlate(), maintenance.getProblemDescription(), maintenance.getStatus(), maintenance.getStartTime(), maintenance.getDoneTime());
     }
 
     private Maintenance mainRequestToMain(MaintenenceRequest newMaintenance) {

@@ -28,6 +28,9 @@ public interface CarRepo extends MongoRepository<Car, String> {
 
     List<Car> findByLocalization(String localization);
 
+    @Query(value = "{'localization': ?0, 'inRepair': ?1}")
+    List<Car> findBrokenCarInLoc(String localization,Boolean inRepair);
+
     @Query(value = "{'localization': ?0, 'type.id': ?1, 'inRepair': ?2, 'isFree': ?3}")
     List<Car> findGoodFreeCarInLoc(String localization, String type, Boolean inRepair, Boolean isFree);
 }
