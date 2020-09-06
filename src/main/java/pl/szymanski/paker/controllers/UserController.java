@@ -91,6 +91,10 @@ public class UserController {
     public ResponseEntity<?> updatePassword(@Valid @RequestBody UserChangePasswordRequest passwordRequest) {
         return userService.updatePassword(passwordRequest);
     }
+    @GetMapping("reset")
+    public ResponseEntity<?> resetPassword(@RequestParam String id) {
+        return userService.resetPassword(id);
+    }
 
     @PostMapping("loc")
     public ResponseEntity<?> updateLocalization(@RequestBody UserChangeLocalization localization) {

@@ -186,6 +186,19 @@ public class UserService {
                 .body(new MessageResponse("Błędne zapytanie"));
     }
 
+    public ResponseEntity<?> resetPassword(String id) {
+            Optional<User> userOptional = user_R.findById(id);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                    user.setPassword(ncdr.encode("123456"));
+                    user_R.save(user);
+                    return ResponseEntity
+                            .ok(new MessageResponse("Hasło zmienione"));
+            }
+        return ResponseEntity
+                .ok(new MessageResponse("Nie znaleziono"));
+    }
+
     public ResponseEntity<?> updateUser(UserUpdate updatedUser) {
         if (updatedUser.isValid()) {
             User user = userUpdateToUser(updatedUser);
@@ -289,7 +302,4 @@ public class UserService {
         nowy.setRoles(tmp);
         return nowy;
     }
-
-
-
 }
