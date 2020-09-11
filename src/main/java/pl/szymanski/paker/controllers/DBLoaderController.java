@@ -94,24 +94,6 @@ public class DBLoaderController {
         return "Baza ról załadowana\n" + out;
     }
 
-//    @GetMapping("load_repair")
-//    public String initiateRepair(){
-//        role_R.deleteAll();
-//
-//        Role role;
-//        var roles = ERole.values();
-//        for(ERole rolee: roles){
-//            role = new Role(rolee);
-//            role_R.save(role);
-//        }
-//        StringBuilder out = new StringBuilder();
-//        for (Role roleE : role_R.findAll()) {
-//            out.append(roleE.getName());
-//            out.append("\n");
-//        }
-//
-//        return "Baza ról załadowana\n" + out;
-//    }
 
     @GetMapping("load_province")
     public String initiateProvince() {
