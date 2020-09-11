@@ -12,6 +12,7 @@ import pl.szymanski.paker.payload.response.*;
 import pl.szymanski.paker.repository.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -379,7 +380,7 @@ public class OrderService {
                     driver.setFree(true);
                     user_R.save(driver);
                 }
-
+                order.setEndTime(new Date());
                 order_R.save(order);
                 return ResponseEntity
                         .ok()

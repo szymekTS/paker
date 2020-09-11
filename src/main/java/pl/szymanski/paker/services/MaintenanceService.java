@@ -13,6 +13,7 @@ import pl.szymanski.paker.repository.CarRepo;
 import pl.szymanski.paker.repository.MaintenanceRepo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +114,7 @@ public class MaintenanceService {
                     break;
                 case INPROGRES:
                     maintenance.setStatus(ERepair.DONE);
+                    maintenance.setDoneTime(new Date());
                     Car car = maintenance.getCar();
                     car.setInRepair(false);
                     car_R.save(car);
