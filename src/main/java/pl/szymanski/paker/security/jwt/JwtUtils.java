@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import pl.szymanski.paker.security.services.UserDetailsImpl;
+import pl.szymanski.paker.security.services.UserDetails;
 import io.jsonwebtoken.*;
 
 @Component
@@ -23,7 +23,7 @@ public class JwtUtils {
 
 	public String generateJwtToken(Authentication authentication) {
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
 		return Jwts.builder()
 				.setSubject((userPrincipal.getUsername()))
@@ -42,15 +42,15 @@ public class JwtUtils {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException e) {
-			logger.error("Invalid JWT signature: {}", e.getMessage());
+			logger.error("Błędna sygnatura tokena: {}", e.getMessage());
 		} catch (MalformedJwtException e) {
-			logger.error("Invalid JWT token: {}", e.getMessage());
+			logger.error("Błędny token: {}", e.getMessage());
 		} catch (ExpiredJwtException e) {
-			logger.error("JWT token is expired: {}", e.getMessage());
+			logger.error("Token przedawniony: {}", e.getMessage());
 		} catch (UnsupportedJwtException e) {
-			logger.error("JWT token is unsupported: {}", e.getMessage());
+			logger.error("Token niewspierany: {}", e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.error("JWT claims string is empty: {}", e.getMessage());
+			logger.error("Token pusty: {}", e.getMessage());
 		}
 
 		return false;

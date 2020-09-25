@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import pl.szymanski.paker.security.jwt.AuthEntryPointJwt;
 import pl.szymanski.paker.security.jwt.AuthTokenFilter;
-import pl.szymanski.paker.security.services.UserDetailsServiceImpl;
+import pl.szymanski.paker.security.services.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +23,7 @@ import pl.szymanski.paker.security.services.UserDetailsServiceImpl;
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+	UserDetailsService userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

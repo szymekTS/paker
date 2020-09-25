@@ -47,6 +47,5 @@ public class CalculateRouteService {
             route.setDistance(wezelMap.get(destiny.getId()).getDystans());
         }
         return route;}
-
     }
 

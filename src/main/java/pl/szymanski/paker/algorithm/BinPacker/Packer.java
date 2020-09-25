@@ -65,5 +65,4 @@ public class Packer {
         node.right = new Node(node.x + w, node.y, node.w - w, h);
         return node;
     }
-
 }

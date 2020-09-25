@@ -1,8 +1,6 @@
 package pl.szymanski.paker.controllers;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -20,17 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.szymanski.paker.models.Role;
-import pl.szymanski.paker.models.User;
-import pl.szymanski.paker.models.enums.ERole;
 import pl.szymanski.paker.payload.request.LoginRequest;
-import pl.szymanski.paker.payload.request.SignupRequest;
 import pl.szymanski.paker.payload.response.JwtResponse;
-import pl.szymanski.paker.payload.response.MessageResponse;
 import pl.szymanski.paker.repository.RoleRepo;
 import pl.szymanski.paker.repository.UserRepo;
 import pl.szymanski.paker.security.jwt.JwtUtils;
-import pl.szymanski.paker.security.services.UserDetailsImpl;
+import pl.szymanski.paker.security.services.UserDetails;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -60,7 +53,7 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
@@ -70,59 +63,5 @@ public class AuthController {
 				userDetails.getUsername(),
 				userDetails.getEmail(),
 				roles));
-	}
-
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (user_R.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
-		}
-
-		if (user_R.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
-		}
-
-		User user = new User(signUpRequest.getUsername(),
-				signUpRequest.getEmail(),
-				ncdr.encode(signUpRequest.getPassword()));
-
-		Set<String> strRoles = signUpRequest.getRoles();
-		Set<Role> roles = new HashSet<>();
-
-		if (strRoles == null) {
-			Role userRole = role_R.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-					case "admin":
-						Role adminRole = role_R.findByName(ERole.ROLE_ADMIN)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(adminRole);
-
-						break;
-					case "mod":
-						Role modRole = role_R.findByName(ERole.ROLE_MODERATOR)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(modRole);
-
-						break;
-					default:
-						Role userRole = role_R.findByName(ERole.ROLE_USER)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(userRole);
-				}
-			});
-		}
-
-		user.setRoles(roles);
-		user_R.save(user);
-
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }

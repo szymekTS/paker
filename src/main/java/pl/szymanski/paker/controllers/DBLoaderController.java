@@ -12,7 +12,9 @@ import pl.szymanski.paker.models.enums.ECarType;
 import pl.szymanski.paker.models.enums.EProvince;
 import pl.szymanski.paker.models.enums.ERole;
 import pl.szymanski.paker.payload.response.MessageResponse;
+import pl.szymanski.paker.payload.response.RouteResponse;
 import pl.szymanski.paker.repository.*;
+import pl.szymanski.paker.services.CalculateRouteService;
 
 import java.util.*;
 
@@ -37,6 +39,8 @@ public class DBLoaderController {
     private PasswordEncoder encoder;
     @Autowired
     private CityRepo city_R;
+    @Autowired
+    private CalculateRouteService routeService;
 
     @GetMapping("load_admin")
     public ResponseEntity<MessageResponse> initiateAdmin() {
@@ -475,5 +479,131 @@ public class DBLoaderController {
         return "Baza miast załadowana\n" + out;
     }
 
+    @GetMapping("test1")
+    public ResponseEntity<?> test1(){
+        Optional<City> optionalCityOrigin = city_R.findByName("Bielsko-Biała");
+        Optional<City> optionalCityDestiny = city_R.findByName("Gdynia");
+        City origin = new City();
+        City destiny= new City();
+        if(optionalCityOrigin.isPresent()){
+            origin = optionalCityOrigin.get();
+        }
+        if(optionalCityDestiny.isPresent()){
+            destiny = optionalCityDestiny.get();
+        }
+
+        Route wynik = routeService.calculateRoute(origin , destiny);
+        RouteResponse response = new RouteResponse();
+        response.setDistance(wynik.getDistance());
+        List<String> trasa = new ArrayList<>();
+        for(City city : wynik.getRoute()) {
+            trasa.add(city.getName());
+        }
+        trasa.add(destiny.getName());
+        response.setId("test_1");
+        response.setRoute(trasa);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("test2")
+    public ResponseEntity<?> test2(){
+        Optional<City> optionalCityOrigin = city_R.findByName("Gorzów Wielkopolski");
+        Optional<City> optionalCityDestiny = city_R.findByName("Biała Podlaska");
+        City origin = new City();
+        City destiny= new City();
+        if(optionalCityOrigin.isPresent()){
+            origin = optionalCityOrigin.get();
+        }
+        if(optionalCityDestiny.isPresent()){
+            destiny = optionalCityDestiny.get();
+        }
+
+        Route wynik = routeService.calculateRoute(origin , destiny);
+        RouteResponse response = new RouteResponse();
+        response.setDistance(wynik.getDistance());
+        List<String> trasa = new ArrayList<>();
+        for(City city : wynik.getRoute()) {
+            trasa.add(city.getName());
+        }
+        trasa.add(destiny.getName());
+        response.setId("test_2");
+        response.setRoute(trasa);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("test3")
+    public ResponseEntity<?> test3(){
+        Optional<City> optionalCityOrigin = city_R.findByName("Jelenia Góra");
+        Optional<City> optionalCityDestiny = city_R.findByName("Suwałki");
+        City origin = new City();
+        City destiny= new City();
+        if(optionalCityOrigin.isPresent()){
+            origin = optionalCityOrigin.get();
+        }
+        if(optionalCityDestiny.isPresent()){
+            destiny = optionalCityDestiny.get();
+        }
+
+        Route wynik = routeService.calculateRoute(origin , destiny);
+        RouteResponse response = new RouteResponse();
+        response.setDistance(wynik.getDistance());
+        List<String> trasa = new ArrayList<>();
+        for(City city : wynik.getRoute()) {
+            trasa.add(city.getName());
+        }
+        trasa.add(destiny.getName());
+        response.setId("test_3");
+        response.setRoute(trasa);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("test4")
+    public ResponseEntity<?> test4(){
+        Optional<City> optionalCityOrigin = city_R.findByName("Świnoujście");
+        Optional<City> optionalCityDestiny = city_R.findByName("Przemyśl");
+        City origin = new City();
+        City destiny= new City();
+        if(optionalCityOrigin.isPresent()){
+            origin = optionalCityOrigin.get();
+        }
+        if(optionalCityDestiny.isPresent()){
+            destiny = optionalCityDestiny.get();
+        }
+
+        Route wynik = routeService.calculateRoute(origin , destiny);
+        RouteResponse response = new RouteResponse();
+        response.setDistance(wynik.getDistance());
+        List<String> trasa = new ArrayList<>();
+        for(City city : wynik.getRoute()) {
+            trasa.add(city.getName());
+        }
+        trasa.add(destiny.getName());
+        response.setId("test_4");
+        response.setRoute(trasa);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("test5")
+    public ResponseEntity<?> test5(){
+        Optional<City> optionalCityOrigin = city_R.findByName("Kraków");
+        Optional<City> optionalCityDestiny = city_R.findByName("Opole");
+        City origin = new City();
+        City destiny= new City();
+        if(optionalCityOrigin.isPresent()){
+            origin = optionalCityOrigin.get();
+        }
+        if(optionalCityDestiny.isPresent()){
+            destiny = optionalCityDestiny.get();
+        }
+
+        Route wynik = routeService.calculateRoute(origin , destiny);
+        RouteResponse response = new RouteResponse();
+        response.setDistance(wynik.getDistance());
+        List<String> trasa = new ArrayList<>();
+        for(City city : wynik.getRoute()) {
+            trasa.add(city.getName());
+        }
+        trasa.add(destiny.getName());
+        response.setId("test_5");
+        response.setRoute(trasa);
+        return ResponseEntity.ok(response);
+    }
 
 }

@@ -11,7 +11,6 @@ class Node {
     public Node fit = null;
 
     public Node() {
-
     }
 
     public Node(float w, float h) {
@@ -25,5 +24,4 @@ class Node {
         this.w = w;
         this.h = h;
     }
-
 }
